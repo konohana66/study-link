@@ -1,0 +1,271 @@
+/* =========================
+   Study Link Admin CSS
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Yu Gothic UI",sans-serif;
+}
+
+body{
+    background:#f5f7fb;
+}
+
+.admin-container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* ===== サイドバー ===== */
+
+.sidebar{
+    width:260px;
+    background:#ffffff;
+    box-shadow:0 0 20px rgba(0,0,0,.08);
+    padding:25px;
+    display:flex;
+    flex-direction:column;
+}
+
+.logo{
+    margin-bottom:35px;
+}
+
+.admin-logo{
+    width:180px;
+    height:auto;
+    display:block;
+    margin-bottom:10px;
+}
+
+.logo h2{
+    color:#2563eb;
+}
+
+.logo p{
+    color:#777;
+    margin-top:5px;
+}
+
+.menu-btn{
+
+    width:100%;
+    padding:14px;
+
+    margin-bottom:12px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#eef4ff;
+
+    color:#333;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+    text-align:left;
+
+}
+
+.menu-btn:hover{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.menu-btn.active{
+
+    background:#2563eb;
+
+    color:white;
+
+}
+
+.logout-btn{
+
+    margin-top:auto;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#ef4444;
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+/* ===== メイン ===== */
+
+.main-content{
+
+    flex:1;
+
+    padding:40px;
+
+}
+
+.page h1{
+
+    margin-bottom:25px;
+
+}
+
+/* ===== カード ===== */
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+}
+
+.card h3{
+
+    margin-bottom:15px;
+
+}
+
+.card p{
+
+    font-size:34px;
+
+    color:#2563eb;
+
+    font-weight:bold;
+
+}
+
+/* ===== 入力 ===== */
+
+input,
+textarea{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:15px;
+
+    border:1px solid #ddd;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+}
+
+textarea{
+
+    min-height:150px;
+
+    resize:vertical;
+
+}
+
+/* ===== 保存ボタン ===== */
+
+.save-btn{
+
+    margin-top:20px;
+
+    padding:15px 25px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+}
+
+.save-btn:hover{
+
+    opacity:.9;
+
+}
+
+/* ===== スマホ ===== */
+
+@media(max-width:900px){
+
+.admin-container{
+
+    flex-direction:column;
+
+}
+
+.sidebar{
+
+    width:100%;
+
+}
+
+.main-content{
+
+    padding:20px;
+
+}
+
+.cards{
+
+    grid-template-columns:1fr;
+
+}
+
+}
+.notice-item{
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+}
+
+.notice-item h3{
+    margin-bottom:8px;
+}
+
+.notice-item p{
+    margin-bottom:8px;
+}
+
+.notice-item small{
+    color:#777;
+}

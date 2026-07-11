@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>クラスノート</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+<h1>📝 クラスノート</h1>
+<p>みんなで予定を書き込もう！</p>
+</header>
+
+<div class="container">
+
+<div class="card" id="postList">
+
+<h2>📢 投稿一覧</h2>
+
+
+<button class="add-post">
+    ➕ 投稿する
+</button>
+</div>
+
+<a href="index.html" class="back-button">
+    🏠 ホームへ戻る
+</a>
+
+</div>
+
+<div id="popup" class="popup">
+
+  <div class="popup-box">
+
+    <h2>📝 新しい投稿</h2>
+
+<input type="text" id="title" placeholder="タイトル">
+
+  <textarea id="content" placeholder="内容を書いてください"></textarea>
+
+  <button class="submit-btn" id="submitBtn">投稿する</button>
+
+    <button class="close-btn">閉じる</button>
+
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

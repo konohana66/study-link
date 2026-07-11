@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お知らせ管理</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<script>
+if(localStorage.getItem("admin")!=="true"){
+    location.href="admin-login.html";
+}
+</script>
+
+<header>
+    <h1>📢 お知らせ管理</h1>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<input id="title" type="text" placeholder="タイトル">
+
+<textarea id="content" placeholder="内容"></textarea>
+
+<button id="submitBtn">
+📤 投稿する
+</button>
+
+</div>
+
+<a href="admin.html" class="back-button">
+⬅ 管理画面へ戻る
+</a>
+
+</div>
+
+<script src="notice-admin.js"></script>
+
+</body>
+</html>
