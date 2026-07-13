@@ -120,19 +120,37 @@ if (localStorage.getItem("admin") !== "true") {
         <!-- カレンダー -->
         <section id="calendarPage" class="page" style="display:none;">
 
-            <h1>📅 カレンダー管理</h1>
+<h1>📅 カレンダー管理</h1>
 
-            <input type="date">
+<input
+type="date"
+id="calendarDate"
+placeholder="日付">
 
-            <input type="text" placeholder="タイトル">
+<input
+type="text"
+id="calendarTitle"
+placeholder="タイトル">
 
-            <textarea placeholder="内容"></textarea>
+<textarea
+id="calendarContent"
+placeholder="内容を書いてください"></textarea>
 
-            <button class="save-btn">
-                📅 予定を追加
-            </button>
+<button
+class="save-btn"
+id="calendarSubmit">
+📅 予定を追加
+</button>
 
-        </section>
+<hr style="margin:30px 0;">
+
+<h2>登録済みの予定</h2>
+
+<div id="calendarList">
+読み込み中...
+</div>
+
+</section>
 
         <!-- 投稿 -->
         <section id="postPage" class="page" style="display:none;">

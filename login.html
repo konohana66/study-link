@@ -1,3 +1,9 @@
+<script>
+if(localStorage.getItem("username")){
+    location.href = "index.html";
+}
+</script>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,6 +13,12 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <script>
+if(localStorage.getItem("username")){
+    location.href = "index.html";
+}
+</script>
 
 <div class="container">
 
@@ -24,7 +36,27 @@
 
 </div>
 
+<script>
+window.onload = () => {
+
+    const savedName = localStorage.getItem("username");
+
+    if(savedName){
+        document.getElementById("username").value = savedName;
+    }
+
+};
+</script>
+
 <script src="login.js"></script>
+
+<script>
+
+if(localStorage.getItem("username")){
+    location.href = "index.html";
+}
+
+</script>
 
 </body>
 </html>

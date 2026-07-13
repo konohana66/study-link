@@ -5,11 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Link</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/logo2.png">
 </head>
 
 <body>
+    <div id="loading">
+
+    <img src="images/logo.png" class="loading-logo">
+
+    <h2>Study Link</h2>
+
+    <p>Loading...</p>
+
+</div>
+
     <script>
 if(!localStorage.getItem("username")){
     location.href = "login.html";
@@ -38,9 +48,12 @@ if(!localStorage.getItem("username")){
 </div>
 
     <div class="card">
-        <h2>📅 今日の予定</h2>
-        <p>予定はありません。</p>
+    <h2>📅 今日の予定</h2>
+
+    <div id="todaySchedule">
+        <p>読み込み中...</p>
     </div>
+</div>
 
     <a href="note.html" class="card-link">
         <div class="card">
@@ -68,7 +81,7 @@ if(!localStorage.getItem("username")){
 
 </nav>
 
-<script src="script.js"></script>
+<script src="js/script.js"></script>
 
 </body>
 </html>

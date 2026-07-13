@@ -20,7 +20,7 @@ async function loadCalendar() {
         calendarList.innerHTML += `
             <div class="notice">
                 <h3>📅 ${event.title}</h3>
-                <small>${event.date}</small>
+                <small>${new Date(event.date).toLocaleDateString("ja-JP")}
                 <p>${event.content}</p>
             </div>
         `;
