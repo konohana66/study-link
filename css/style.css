@@ -8,6 +8,7 @@ body{
     font-family:"Yu Gothic","Segoe UI",sans-serif;
     background:#f5f7fb;
     color:#1e293b;
+    padding:0;
     padding-bottom:90px;
 }
 
@@ -491,5 +492,105 @@ input{
 .add-post:hover{
 
     opacity:.9;
+
+}
+/* ==========================
+   スマホ対応
+========================== */
+
+@media screen and (max-width:768px){
+
+    body{
+        padding:12px;
+    }
+
+    button{
+    min-height:50px;
+}
+
+    .container{
+        width:100%;
+        padding:0;
+    }
+
+    .card{
+        width:100%;
+        margin-bottom:20px;
+        border-radius:15px;
+        padding:16px;
+        box-sizing:border-box;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    h2{
+        font-size:22px;
+    }
+
+    p{
+        font-size:15px;
+    }
+
+    button{
+        width:100%;
+        font-size:17px;
+        padding:14px;
+        margin-top:10px;
+    }
+
+    input,
+    textarea,
+    select{
+        width:100%;
+        box-sizing:border-box;
+        font-size:16px;
+    }
+
+    .back-button{
+        display:block;
+        width:100%;
+        text-align:center;
+        box-sizing:border-box;
+    }
+
+}
+@media screen and (max-width:768px){
+
+    .note-tabs{
+
+        flex-direction:column;
+
+    }
+
+    .post-top{
+
+        display:flex;
+        flex-direction:column;
+        align-items:stretch;
+        gap:15px;
+
+    }
+
+    .post-top h2{
+
+        text-align:center;
+        margin:0;
+
+    }
+
+    .add-post{
+
+        width:100%;
+
+    }
+
+}
+.card{
+
+    padding:16px;
+
+    border-radius:15px;
 
 }
