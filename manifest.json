@@ -1,9 +1,8 @@
 {
   "name": "Study Link",
   "short_name": "Study Link",
-  "description": "中学生向け学習サポートアプリ",
-  "start_url": "/study-link/",
-  "scope": "/study-link/",
+  "description": "中学生向け学習サポート",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#2563eb",
   "theme_color": "#2563eb",
