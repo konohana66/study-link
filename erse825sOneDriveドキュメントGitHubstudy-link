@@ -1,0 +1,103 @@
+[1mdiff --git a/index.html b/index.html[m
+[1mindex 363f713..442bbe8 100644[m
+[1m--- a/index.html[m
+[1m+++ b/index.html[m
+[36m@@ -67,33 +67,33 @@[m [mif(!localStorage.getItem("username")){[m
+ [m
+     <div class="card">[m
+         <h2>🏆 クラス対抗</h2>[m
+         <p>Coming Soon...</p>[m
+     </div>[m
+ [m
+ </main>[m
+ [m
+ <nav class="bottom-nav">[m
+ [m
+     <a href="index.html">🏠<br>ホーム</a>[m
+ [m
+     <a href="note.html">📝<br>ノート</a>[m
+ [m
+ <a href="calendar.html">📅<br>カレンダー</a>[m
+ [m
+   <a href="mypage.html">👤 マイページ</a>[m
+ [m
+ </nav>[m
+ [m
+[31m-<script src="js/script.js"></script>[m
+[32m+[m[32m<script src="js/script.js?v=2"></script>[m
+ [m
+ <script>[m
+ if ("serviceWorker" in navigator) {[m
+   window.addEventListener("load", () => {[m
+     navigator.serviceWorker.register("./sw.js")[m
+       .then(() => console.log("Service Worker登録成功"))[m
+       .catch(err => console.log("Service Worker登録失敗", err));[m
+   });[m
+ }[m
+ </script>[m
+ </body>[m
+ </html>[m
+\ No newline at end of file[m
+[1mdiff --git a/js/note.js b/js/note.js[m
+[1mindex 72718e5..7ef10eb 100644[m
+[1m--- a/js/note.js[m
+[1m+++ b/js/note.js[m
+[36m@@ -58,40 +58,58 @@[m [mcloseBtn.onclick = () => {[m
+ [m
+ };[m
+ [m
+ // --------------------[m
+ // 投稿[m
+ // --------------------[m
+ [m
+ submitBtn.onclick = async () => {[m
+ [m
+     if(title.value === "" || content.value === ""){[m
+         alert("タイトルと内容を入力してください！");[m
+         return;[m
+     }[m
+ [m
+     let imageUrl = "";[m
+ [m
+     if(image.files.length > 0){[m
+         imageUrl = await uploadImage(image.files[0]);[m
+     }[m
+ [m
+[32m+[m[32m    let imageData = "";[m
+[32m+[m
+[32m+[m[32mif(image.files.length > 0){[m
+[32m+[m
+[32m+[m[32m    const file = image.files[0];[m
+[32m+[m
+[32m+[m[32m    imageData = await new Promise(resolve=>{[m
+[32m+[m
+[32m+[m[32m        const reader = new FileReader();[m
+[32m+[m
+[32m+[m[32m        reader.onload=e=>resolve(e.target.result);[m
+[32m+[m
+[32m+[m[32m        reader.readAsDataURL(file);[m
+[32m+[m
+[32m+[m[32m    });[m
+[32m+[m
+[32m+[m[32m}[m
+[32m+[m
+     const data = {[m
+         type: "post",[m
+         category: category.value,[m
+         name: localStorage.getItem("username") || "ゲスト",[m
+         title: title.value,[m
+         content: content.value,[m
+         image: imageUrl[m
+     };[m
+ [m
+     await fetch([m
+         "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",[m
+         {[m
+             method: "POST",[m
+             body: JSON.stringify(data)[m
+         }[m
+     );[m
+ [m
+     title.value = "";[m
+     content.value = "";[m
+     image.value = "";[m
