@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Study Link</title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
     <link rel="icon" href="images/logo2.png">
 
     <link rel="manifest" href="manifest.json">
@@ -43,11 +43,21 @@ if(!localStorage.getItem("username")){
         <p>今日も勉強頑張ろう！</p>
     </div>
 <div class="card">
+
     <h2>📢 お知らせ</h2>
 
     <div id="noticeList">
         <p>読み込み中...</p>
     </div>
+
+    <hr>
+
+    <h3>🎁 プレゼント</h3>
+
+    <div id="giftList">
+        <p>読み込み中...</p>
+    </div>
+
 </div>
 
     <div class="card">
@@ -58,17 +68,30 @@ if(!localStorage.getItem("username")){
     </div>
 </div>
 
+
+
     <a href="note.html" class="card-link">
         <div class="card">
-            <h2>📝 クラスノート</h2>
+            <h2>📝 掲示板</h2>
             <p>みんなの投稿を見る →</p>
         </div>
     </a>
 
+    <a href="study.html" class="card-link">
     <div class="card">
-        <h2>🏆 クラス対抗</h2>
-        <p>Coming Soon...</p>
+        <h2>📚 学習</h2>
+        <p>タイムアタック・ランキング →</p>
     </div>
+</a>
+
+    <a href="shop.html" class="card-link">
+    <div class="card">
+
+    <h2>🛒 ショップ</h2>
+
+    <p>🪙 Coinを使ってアイテムを購入しよう →</p>
+
+</div>
 
 </main>
 
@@ -76,23 +99,52 @@ if(!localStorage.getItem("username")){
 
     <a href="index.html">🏠<br>ホーム</a>
 
-    <a href="note.html">📝<br>ノート</a>
+    <a href="study.html">📚<br>学習</a>
 
-<a href="calendar.html">📅<br>カレンダー</a>
+    <a href="note.html">📝<br>掲示板</a>
 
-  <a href="mypage.html">👤 マイページ</a>
+    <a href="calendar.html">📅<br>予定</a>
+
+    <a href="mypage.html">👤<br>マイページ</a>
 
 </nav>
 
-<script src="js/script.js"></script>
+<!-- 🎁 プレゼント獲得ポップアップ -->
+<div id="giftPopup" class="gift-popup">
+
+    <div class="gift-popup-box">
+
+        <div class="gift-popup-icon">
+            🎁
+        </div>
+
+        <h2>プレゼントGET！</h2>
+
+        <div id="giftPopupItems"></div>
+
+        <button id="giftPopupClose">
+            OK
+        </button>
+
+    </div>
+
+</div>
+
+
+<script src="js/script.js?v=2"></script>
+<script src="js/freeze-check.js?v=1"></script>
 
 <script>
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .then(() => console.log("Service Worker登録成功"))
-      .catch(err => console.log("Service Worker登録失敗", err));
-  });
+
+    window.addEventListener("load", () => {
+
+        navigator.serviceWorker.register("./sw.js")
+            .then(() => console.log("Service Worker登録成功"))
+            .catch(err => console.log("Service Worker登録失敗", err));
+
+    });
+
 }
 </script>
 </body>

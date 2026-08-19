@@ -1,62 +1,109 @@
-<script>
-if(localStorage.getItem("username")){
-    location.href = "index.html";
-}
-</script>
-
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Study Link ログイン</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-  <script>
-if(localStorage.getItem("username")){
-    location.href = "index.html";
-}
-</script>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Link ログイン</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
 
 <div class="container">
 
-  <div class="card">
+    <div class="card">
 
-    <h1>📚 Study Link</h1>
+        <h1>📚 Study Link</h1>
 
-    <p>名前を入力してください！</p>
+        <!-- ======================
+             初回登録
+        ======================= -->
 
-    <input type="text" id="username" placeholder="例：大阪太郎">
+        <div id="registerArea">
 
-    <button id="loginBtn">はじめる</button>
+            <h2>🆕 初回登録</h2>
 
-  </div>
+            <p>Study Linkをはじめて利用する方</p>
+
+            <input
+                type="text"
+                id="registerName"
+                placeholder="名前">
+
+            <br><br>
+
+            <input
+                type="password"
+                id="registerPassword"
+                placeholder="パスワード">
+
+            <br><br>
+
+            <input
+                type="password"
+                id="registerPasswordConfirm"
+                placeholder="パスワード（確認）">
+
+            <br><br>
+
+            <button id="registerBtn">
+                🆕 登録する
+            </button>
+
+            <br><br>
+
+            <button id="showLoginBtn">
+                🔑 登録済みの方はこちら
+            </button>
+
+        </div>
+
+
+        <!-- ======================
+             ログイン
+        ======================= -->
+
+        <div id="loginArea" style="display:none;">
+
+            <h2>🔑 ログイン</h2>
+
+            <p>登録した名前とパスワードを入力してください</p>
+
+            <input
+                type="text"
+                id="loginName"
+                placeholder="名前">
+
+            <br><br>
+
+            <input
+                type="password"
+                id="loginPassword"
+                placeholder="パスワード">
+
+            <br><br>
+
+            <button id="loginBtn">
+                🔑 ログイン
+            </button>
+
+            <br><br>
+
+            <button id="showRegisterBtn">
+                🆕 新規登録はこちら
+            </button>
+
+        </div>
+
+    </div>
 
 </div>
 
-<script>
-window.onload = () => {
-
-    const savedName = localStorage.getItem("username");
-
-    if(savedName){
-        document.getElementById("username").value = savedName;
-    }
-
-};
-</script>
 
 <script src="js/login.js"></script>
-
-<script>
-
-if(localStorage.getItem("username")){
-    location.href = "index.html";
-}
-
-</script>
 
 </body>
 </html>

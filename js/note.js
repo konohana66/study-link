@@ -1,3 +1,4 @@
+localStorage.setItem("daily_openNote","true");
 const popup = document.getElementById("popup");
 const addBtn = document.querySelector(".add-post");
 const closeBtn = document.querySelector(".close-btn");
@@ -76,13 +77,14 @@ submitBtn.onclick = async () => {
     }
 
     const data = {
-        type: "post",
-        category: category.value,
-        name: localStorage.getItem("username") || "ゲスト",
-        title: title.value,
-        content: content.value,
-        image: imageUrl
-    };
+    type: "post",
+    category: category.value,
+    name: localStorage.getItem("username") || "ゲスト",
+    userId: localStorage.getItem("userId") || "",
+    title: title.value,
+    content: content.value,
+    image: imageUrl
+};
 
     await fetch(
         "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",

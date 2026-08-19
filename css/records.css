@@ -1,0 +1,653 @@
+/* =========================
+   Study Link
+   学習記録
+========================= */
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #f4f7fc;
+    color: #1f2937;
+}
+
+.container {
+    max-width: 850px;
+    margin: auto;
+    padding: 30px 20px 100px;
+}
+
+
+/* =========================
+   タイトル
+========================= */
+
+h1 {
+    color: #2563eb;
+    font-size: 34px;
+    margin-bottom: 5px;
+}
+
+.sub {
+    color: #64748b;
+    margin-bottom: 25px;
+}
+
+
+/* =========================
+   カード
+========================= */
+
+.card {
+    background: white;
+    border-radius: 22px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+    color: #2563eb;
+    margin-top: 0;
+}
+
+
+/* =========================
+   今週の学習時間
+========================= */
+
+.summary-card {
+    text-align: center;
+}
+
+.study-time {
+    font-size: 42px;
+    font-weight: bold;
+    color: #2563eb;
+    margin: 20px 0;
+}
+
+.study-time span:nth-child(2),
+.study-time span:nth-child(4) {
+    font-size: 20px;
+    color: #64748b;
+}
+
+#studyMessage {
+    font-size: 18px;
+}
+
+
+/* =========================
+   曜日別グラフ
+========================= */
+
+.bar-chart {
+    height: 320px;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    border-bottom: 2px solid #cbd5e1;
+
+    padding: 10px 5px 0;
+
+    box-sizing: border-box;
+}
+
+
+/* 1日分 */
+
+.day-bar {
+    flex: 1;
+
+    height: 100%;
+
+    position: relative;
+
+    display: block;
+
+    min-width: 45px;
+}
+
+
+/* =========================
+   棒グラフ
+========================= */
+
+.bar-fill {
+    position: absolute;
+
+    left: 50%;
+    transform: translateX(-50%);
+
+    bottom: 55px;
+
+    width: 55px;
+    max-width: 70%;
+
+    background: linear-gradient(
+        to top,
+        #2563eb,
+        #60a5fa
+    );
+
+    border-radius: 12px 12px 4px 4px;
+
+    box-shadow: 0 5px 12px rgba(37, 99, 235, 0.2);
+
+    min-height: 5px;
+}
+
+
+/* =========================
+   学習時間
+   棒グラフの下
+========================= */
+
+.bar-value {
+    position: absolute;
+
+    bottom: 30px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    color: #1f2937;
+
+    white-space: nowrap;
+
+    z-index: 5;
+}
+
+
+/* =========================
+   曜日
+========================= */
+
+.day-name {
+    position: absolute;
+
+    bottom: 5px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 15px;
+
+    color: #64748b;
+
+    z-index: 5;
+}
+
+
+/* =========================
+   教科バランス
+========================= */
+
+.subject-balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    padding: 25px 10px 10px;
+}
+
+
+/* =========================
+   円グラフ
+========================= */
+
+.pie-chart {
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 50%;
+
+    background: #e2e8f0;
+
+    flex-shrink: 0;
+
+    position: relative;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.08);
+
+    transition:
+        background 0.5s ease;
+
+}
+
+
+/* 円の中央を白くしてドーナツ型にする */
+
+.pie-chart::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 105px;
+    height: 105px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(
+        -50%,
+        -50%
+    );
+
+}
+
+
+/* =========================
+   凡例
+========================= */
+
+.subject-legend {
+
+    width: 330px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+
+}
+
+
+/* 1教科 */
+
+.legend-item {
+
+    display: grid;
+
+    grid-template-columns:
+        16px
+        55px
+        60px
+        50px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 15px;
+
+}
+
+
+/* 色 */
+
+.legend-color {
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 4px;
+
+}
+
+
+/* 教科名 */
+
+.legend-name {
+
+    font-weight: bold;
+
+}
+
+
+/* 時間 */
+
+.legend-item span:nth-child(3) {
+
+    color: #475569;
+
+    text-align: right;
+
+}
+
+
+/* 割合 */
+
+.legend-item span:nth-child(4) {
+
+    color: #64748b;
+
+    text-align: right;
+
+    font-size: 13px;
+
+}
+
+
+/* =========================
+   教科カラー
+========================= */
+
+.japanese-color {
+    background: #ef4444;
+}
+
+.math-color {
+    background: #2563eb;
+}
+
+.english-color {
+    background: #22c55e;
+}
+
+.science-color {
+    background: #f59e0b;
+}
+
+.social-color {
+    background: #a855f7;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 600px) {
+
+    .subject-balance {
+
+        flex-direction: column;
+
+        gap: 30px;
+
+    }
+
+    .pie-chart {
+
+        width: 200px;
+        height: 200px;
+
+    }
+
+    .pie-chart::after {
+
+        width: 90px;
+        height: 90px;
+
+    }
+
+    .subject-legend {
+
+        width: 100%;
+
+    }
+
+}
+
+
+/* =========================
+   戻るボタン
+========================= */
+
+.back-btn {
+    display: block;
+
+    text-align: center;
+
+    background: white;
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+    padding: 15px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 600px) {
+
+    .container {
+        padding: 20px 15px 100px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .study-time {
+        font-size: 34px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+
+    /* グラフ */
+
+    .bar-chart {
+        height: 280px;
+
+        gap: 5px;
+
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .bar-fill {
+        width: 35px;
+        max-width: 65%;
+
+        bottom: 55px;
+    }
+
+    .bar-value {
+        font-size: 12px;
+        bottom: 30px;
+    }
+
+    .day-name {
+        font-size: 13px;
+        bottom: 5px;
+    }
+
+
+    /* 教科 */
+
+    .subject {
+        grid-template-columns: 45px 1fr 45px;
+
+        gap: 8px;
+    }
+
+}
+/* ====================
+   教科バランス
+==================== */
+
+.subject-balance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 70px;
+    padding: 30px 10px;
+}
+
+
+/* 円グラフ */
+
+.pie-chart {
+    width: 280px;
+    height: 280px;
+
+    border-radius: 50%;
+
+    background: #e2e8f0;
+
+    position: relative;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+/* 真ん中をくり抜いてドーナツ */
+
+.pie-chart::after {
+
+    content: "";
+
+    position: absolute;
+
+    width: 140px;
+    height: 140px;
+
+    background: white;
+
+    border-radius: 50%;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(-50%, -50%);
+}
+
+
+/* 凡例 */
+
+.subject-legend {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-width: 300px;
+}
+
+
+.legend-item {
+
+    display: grid;
+
+    grid-template-columns:
+        22px
+        1fr
+        60px
+        60px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 16px;
+}
+
+
+.legend-color {
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 5px;
+}
+
+
+.japanese-color {
+    background: #ef4444;
+}
+
+.math-color {
+    background: #2563eb;
+}
+
+.english-color {
+    background: #a855f7;
+}
+
+.science-color {
+    background: #f59e0b;
+}
+
+.social-color {
+    background: #22c55e;
+}
+
+
+.legend-name {
+    font-weight: bold;
+}
+
+
+.legend-item span:nth-child(3),
+.legend-item span:nth-child(4) {
+
+    color: #64748b;
+
+}
+
+
+/* ====================
+   スマホ
+==================== */
+
+@media (max-width: 600px) {
+
+    .subject-balance {
+
+        flex-direction: column;
+
+        gap: 30px;
+
+    }
+
+
+    .pie-chart {
+
+        width: 220px;
+        height: 220px;
+
+    }
+
+
+    .pie-chart::after {
+
+        width: 110px;
+        height: 110px;
+
+    }
+
+
+    .subject-legend {
+
+        min-width: 100%;
+
+    }
+
+}

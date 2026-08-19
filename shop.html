@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ショップ</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shop.css">
+
+</head>
+
+
+<body>
+
+<div class="shop-container">
+
+
+    <!-- =========================
+         ヘッダー
+    ========================== -->
+
+    <div class="shop-header">
+
+        <h1>🛒 ショップ</h1>
+
+        <div class="coin-display">
+    🪙 <span id="coin">0</span> Coin
+    <span class="ticket-display">
+        🎟️ <span id="ticket">0</span>
+    </span>
+</div>
+    </div>
+
+
+    <!-- =========================
+         カテゴリーボタン
+    ========================== -->
+
+    <div class="shop-categories">
+
+        <button
+            class="category-btn active"
+            onclick="showCategory('background', this)">
+
+            🎨 背景
+
+        </button>
+
+
+        <button
+            class="category-btn"
+            onclick="showCategory('frame', this)">
+
+            🖼️ フレーム
+
+        </button>
+
+
+        <button
+            class="category-btn"
+            onclick="showCategory('title', this)">
+
+            🏷️ 称号
+
+        </button>
+
+
+        <button
+            class="category-btn"
+            onclick="showCategory('other', this)">
+
+            🎟️ その他
+
+        </button>
+
+    </div>
+
+
+    <!-- =========================
+         商品一覧
+    ========================== -->
+
+    <div class="shop-items">
+
+
+        <!-- =========================
+             🎨 背景
+        ========================== -->
+
+        <div
+            class="shop-category"
+            data-category="background">
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-night"></div>
+
+                <h2>ナイトスタディ</h2>
+
+                <p>夜空をイメージしたプロフィール背景</p>
+
+                <div class="price">
+                    🪙 250 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="background_night"
+                    onclick="buyItem('background_night', 250)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-sunrise"></div>
+
+                <h2>サンライズ</h2>
+
+                <p>朝焼けをイメージしたプロフィール背景</p>
+
+                <div class="price">
+                    🪙 250 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="background_sunrise"
+                    onclick="buyItem('background_sunrise', 250)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-ocean"></div>
+
+                <h2>オーシャン</h2>
+
+                <p>海をイメージしたプロフィール背景</p>
+
+                <div class="price">
+                    🪙 300 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="background_ocean"
+                    onclick="buyItem('background_ocean', 300)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             🖼️ フレーム
+        ========================== -->
+
+        <div
+            class="shop-category"
+            data-category="frame"
+            style="display:none;">
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-diamond"></div>
+
+                <h2>ダイヤモンドフレーム</h2>
+
+                <p>キラキラ輝く限定フレーム</p>
+
+                <div class="price">
+                    🪙 350 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="frame_diamond"
+                    onclick="buyItem('frame_diamond', 350)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-gold"></div>
+
+                <h2>ゴールドフレーム</h2>
+
+                <p>豪華なゴールドフレーム</p>
+
+                <div class="price">
+                    🪙 400 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="frame_gold"
+                    onclick="buyItem('frame_gold', 400)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon item-energy"></div>
+
+                <h2>エナジーフレーム</h2>
+
+                <p>勢いのある限定フレーム</p>
+
+                <div class="price">
+                    🪙 450 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="frame_energy"
+                    onclick="buyItem('frame_energy', 450)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             🏷️ 称号
+        ========================== -->
+
+        <div
+            class="shop-category"
+            data-category="title"
+            style="display:none;">
+
+
+            <div class="shop-item">
+
+                <div class="item-icon">📚</div>
+
+                <h2>勉強マスター</h2>
+
+                <p>勉強を極めた者の称号</p>
+
+                <div class="price">
+                    🪙 500 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="title_master"
+                    onclick="buyItem('title_master', 500)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon">⚡</div>
+
+                <h2>集中の達人</h2>
+
+                <p>集中力を極めた者の称号</p>
+
+                <div class="price">
+                    🪙 600 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="title_focus"
+                    onclick="buyItem('title_focus', 600)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+
+            <div class="shop-item">
+
+                <div class="item-icon">👑</div>
+
+                <h2>Study Legend</h2>
+
+                <p>最高ランクを目指す者の称号</p>
+
+                <div class="price">
+                    🪙 800 Coin
+                </div>
+
+                <button
+                    class="buy-btn"
+                    data-item="title_legend"
+                    onclick="buyItem('title_legend', 800)">
+
+                    購入
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- =========================
+          🎟️ その他
+         ========================= -->
+
+<div
+    class="shop-category"
+    data-category="other"
+    style="display:none;">
+
+    <div class="shop-item lottery-item">
+
+        <div class="item-icon lottery-icon"></div>
+
+        <h2>🎰 Study Link 抽選</h2>
+
+        <p>
+            抽選券を使って<br>
+            ランダムな報酬をGET！
+        </p>
+
+        <div class="price">
+            🎟️ 抽選券 ×1
+        </div>
+
+        <button
+            class="lottery-btn"
+            onclick="drawLottery()">
+
+            🎰 抽選する
+
+        </button>
+
+    </div>
+
+</div>
+
+
+    </div>
+
+
+    <a href="index.html" class="back-button">
+
+        🏠 ホームへ戻る
+
+    </a>
+
+
+</div>
+
+
+<script src="js/shop.js?v=2"></script>
+<script src="js/freeze-check.js?v=1"></script>
+
+
+<script>
+
+function showCategory(category, button) {
+
+    // 全カテゴリーを隠す
+
+    document
+        .querySelectorAll(".shop-category")
+        .forEach(categoryElement => {
+
+            categoryElement.style.display =
+                "none";
+
+        });
+
+
+    // 選択したカテゴリーを表示
+
+    const target =
+        document.querySelector(
+            `.shop-category[data-category="${category}"]`
+        );
+
+
+    if (target) {
+
+        target.style.display =
+            "grid";
+
+    }
+
+
+    // ボタンの状態
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+}
+
+</script>
+
+<!-- 🎰 抽選結果ポップアップ -->
+
+<div id="lotteryPopup" class="lottery-popup">
+
+    <div class="lottery-popup-box">
+
+        <div class="lottery-popup-icon">
+            🎰
+        </div>
+
+        <h2>🎉 抽選結果！</h2>
+
+        <div id="lotteryRarity"></div>
+
+        <div id="lotteryReward"></div>
+
+        <button
+    id="lotteryPopupClose"
+    onclick="closeLotteryPopup()">
+    OK
+</button>
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

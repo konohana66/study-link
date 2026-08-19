@@ -269,3 +269,17 @@ textarea{
 .notice-item small{
     color:#777;
 }
+.back-user-btn {
+    margin-bottom: 20px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #e8eefc;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.back-user-btn:hover {
+    background: #d9e4fb;
+}

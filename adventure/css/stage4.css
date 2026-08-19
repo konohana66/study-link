@@ -1,0 +1,100 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#203b20;
+
+    color:white;
+
+    font-family:"Yu Gothic UI",sans-serif;
+
+}
+
+#game{
+
+    max-width:900px;
+
+    margin:auto;
+
+    padding:40px;
+
+}
+
+#topBar{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:40px;
+
+}
+
+#questionBox{
+
+    background:white;
+
+    color:black;
+
+    border-radius:20px;
+
+    padding:40px;
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+#question{
+
+    font-size:50px;
+
+}
+
+#answers{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+.answer{
+
+    padding:20px;
+
+    border:none;
+
+    border-radius:15px;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+}
+
+.answer:hover{
+
+    transform:scale(1.03);
+
+}
+#message{
+
+    height:40px;
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    margin-bottom:20px;
+
+}

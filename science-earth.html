@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Study Link - 地球・大地</title>
+
+    <link
+        rel="stylesheet"
+        href="css/study.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🌍 地球・大地</h1>
+
+    <p class="sub">
+        問題数を選んで挑戦しよう！
+    </p>
+
+
+    <!-- 問題数選択 -->
+
+    <div id="countArea" class="card">
+
+        <h2>📚 問題数を選択</h2>
+
+        <p>
+            今回は何問解く？
+        </p>
+
+        <div class="question-count">
+
+            <button
+                type="button"
+                class="count-btn"
+                onclick="startQuiz(10)">
+                10問
+            </button>
+
+            <button
+                type="button"
+                class="count-btn"
+                onclick="startQuiz(30)">
+                30問
+            </button>
+
+            <button
+                type="button"
+                class="count-btn"
+                onclick="startQuiz(50)">
+                50問
+            </button>
+
+            <button
+                type="button"
+                class="count-btn"
+                onclick="startQuiz(100)">
+                100問
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- 問題 -->
+
+    <div
+        id="quizArea"
+        class="card"
+        style="display:none;">
+
+        <p id="progress">
+            第1問 / 10問
+        </p>
+
+        <h2 id="question">
+            読み込み中...
+        </h2>
+
+        <div id="answers"></div>
+
+        <p id="result"></p>
+
+    </div>
+
+
+    <!-- 結果 -->
+
+    <div
+        id="finish"
+        class="card"
+        style="display:none;">
+
+        <h2>🎉 終了！</h2>
+
+        <p id="score"></p>
+
+        <p id="xpResult"></p>
+
+        <a
+            href="science.html"
+            class="back-btn">
+
+            🔬 理科へ戻る
+
+        </a>
+
+    </div>
+
+</div>
+
+
+<script src="js/science-earth.js"></script>
+
+<script src="js/freeze-check.js?v=1"></script>
+
+</body>
+
+</html>

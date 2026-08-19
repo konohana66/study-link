@@ -12,23 +12,104 @@
 
   <div class="card">
 
-    <h1>👤 マイページ</h1>
+    <h1>マイページ</h1>
 
-    <h2 id="userName"></h2>
+    <div id="profileArea">
 
-    <button id="changeName">✏️ 名前を変更</button>
+    <div id="profileIcon">
+        👤
+    </div>
 
-    <button id="logout">🚪 ログアウト</button>
+    <div id="profileTitle"></div>
+
+</div>
+
+<h2 id="userName"></h2>
+
+<hr>
+
+<h2>レベル</h2>
+
+<h1 id="level">Lv.1</h1>
+
+<progress id="xpBar" value="0" max="100"></progress>
+
+<p id="xpText">0 / 100 XP</p>
+
+<hr>
+
+<h2>Coin</h2>
+
+<h1 id="coin">0 Coin</h1>
+
+<hr>
+
+<h2>称号</h2>
+
+<h1 id="rank">Bronze</h1>
+
+<hr>
+
+<button id="editProfile">編集</button>
+
+<div id="editArea" style="display:none;">
+
+    <h2>プロフィール編集</h2>
+
+    <label>
+        名前
+        <input type="text" id="editName">
+    </label>
 
     <br><br>
 
-    <a href="index.html" class="back-button">🏠 ホームへ戻る</a>
+<label>
+    🏷️ 称号
+    <select id="editTitle">
+        <option value="default">Bronze</option>
+    </select>
+</label>
 
-  </div>
+<br><br>
+
+<label>
+    🎨 プロフィール背景
+    <select id="editBackground">
+        <option value="default">通常</option>
+    </select>
+</label>
+
+<br><br>
+
+<label>
+    🖼️ アイコンフレーム
+    <select id="editFrame">
+        <option value="default">通常</option>
+    </select>
+</label>
+
+    <br><br>
+
+    <button id="saveProfile">保存</button>
+
+    <button id="cancelEdit">キャンセル</button>
+
+</div>
+
+<br><br>
+
+<button id="logout">ログアウト</button>
+
+<br><br>
+
+<a href="index.html" class="back-button">
+    ホームへ戻る
+</a>
 
 </div>
 
 <script src="js/mypage.js"></script>
+<script src="js/freeze-check.js?v=1"></script>
 
 </body>
 </html>

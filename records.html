@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Link - 学習記録</title>
+
+    <link rel="stylesheet" href="css/records.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>📊 学習記録</h1>
+
+    <p class="sub">
+        自分の頑張りをチェックしよう！
+    </p>
+
+
+    <!-- 今週の学習時間 -->
+    <div class="card summary-card">
+
+        <h2>📚 今週の学習時間</h2>
+
+        <div class="study-time">
+            <span id="totalHours">0</span>
+            <span>時間</span>
+            <span id="totalMinutes">0</span>
+            <span>分</span>
+        </div>
+
+        <p id="studyMessage">
+            今週も頑張ろう！
+        </p>
+
+    </div>
+
+
+    <!-- 曜日別 -->
+    <div class="card">
+
+        <h2>📅 曜日別学習時間</h2>
+
+        <div class="bar-chart" id="weeklyChart"></div>
+
+    </div>
+
+
+    <!-- 教科バランス -->
+<div class="card">
+
+    <h2>📚 教科バランス</h2>
+
+    <div class="subject-balance">
+
+        <!-- 円グラフ -->
+        <div class="pie-chart" id="subjectPieChart">
+        </div>
+
+        <!-- 凡例 -->
+        <div class="subject-legend">
+
+            <div class="legend-item">
+                <span class="legend-color japanese-color"></span>
+                <span class="legend-name">国語</span>
+                <span id="japaneseTime">0分</span>
+                <span id="japanesePercent">0%</span>
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-color math-color"></span>
+                <span class="legend-name">数学</span>
+                <span id="mathTime">0分</span>
+                <span id="mathPercent">0%</span>
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-color english-color"></span>
+                <span class="legend-name">英語</span>
+                <span id="englishTime">0分</span>
+                <span id="englishPercent">0%</span>
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-color science-color"></span>
+                <span class="legend-name">理科</span>
+                <span id="scienceTime">0分</span>
+                <span id="sciencePercent">0%</span>
+            </div>
+
+            <div class="legend-item">
+                <span class="legend-color social-color"></span>
+                <span class="legend-name">社会</span>
+                <span id="socialTime">0分</span>
+                <span id="socialPercent">0%</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+    <!-- 戻る -->
+    <a href="study.html" class="back-btn">
+        📚 学習へ戻る
+    </a>
+
+</div>
+
+
+<script src="js/records.js"></script>
+<script src="js/freeze-check.js?v=1"></script>
+
+</body>
+
+</html>
