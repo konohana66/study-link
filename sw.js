@@ -8,8 +8,6 @@ const urlsToCache = [
   "./mypage.html",
   "./login.html",
   "./study.html",
-  "./timeattack.html",
-  "./play.html",
   "./css/style.css",
   "./css/study.css",
   "./js/script.js",
@@ -32,31 +30,35 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-
   event.waitUntil(
-
     caches.keys().then(keys =>
       Promise.all(
         keys.map(key => {
-          if(key !== CACHE_NAME){
+          if (key !== CACHE_NAME) {
             return caches.delete(key);
           }
         })
       )
     )
-
   );
 
   self.clients.claim();
-
 });
 
 self.addEventListener("fetch", event => {
-
   event.respondWith(
+    fetch(event.request)
+      .then(response => {
+        if (event.request.method === "GET") {
+          const responseClone = response.clone();
 
-    fetch(event.request).catch(() => caches.match(event.request))
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseClone);
+          });
+        }
 
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
-
 });
