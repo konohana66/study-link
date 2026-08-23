@@ -188,9 +188,9 @@ function renderCalendar() {
 
 
         html += `
-
-            <div
-                class="calendar-day ${isToday ? "today" : ""}">
+    <div
+        class="calendar-day ${isToday ? "today" : ""}"
+        onclick="showDayDetails('${dateString}')">
 
                 <div class="calendar-date">
                     ${day}
@@ -329,6 +329,145 @@ function escapeHtml(text) {
         text || "";
 
     return div.innerHTML;
+
+}
+
+// ==========================
+// 日付の詳細表示
+// ==========================
+
+function showDayDetails(dateString) {
+
+    const dayEvents = events.filter(event => {
+
+        const start =
+            getEventDate(
+                event.startDate || event.date
+            );
+
+        const end =
+            getEventDate(
+                event.endDate ||
+                event.startDate ||
+                event.date
+            );
+
+        return (
+            start &&
+            end &&
+            dateString >= start &&
+            dateString <= end
+        );
+
+    });
+
+
+    let detailHtml = `
+        <div class="calendar-detail">
+
+            <h3>
+                ${formatJapaneseDate(dateString)}
+            </h3>
+    `;
+
+
+    if (dayEvents.length === 0) {
+
+        detailHtml += `
+            <p>この日の予定はありません。</p>
+        `;
+
+    } else {
+
+        dayEvents.forEach(event => {
+
+            let timeText = "";
+
+if (event.startTime && event.endTime) {
+
+    timeText =
+        `${escapeHtml(event.startTime)}〜${escapeHtml(event.endTime)}`;
+
+} else if (event.startTime) {
+
+    timeText =
+        `${escapeHtml(event.startTime)}〜`;
+
+} else if (event.endTime) {
+
+    timeText =
+        `〜${escapeHtml(event.endTime)}`;
+
+}
+
+
+            detailHtml += `
+                <div class="calendar-detail-event">
+
+                    <h4>
+                        ${escapeHtml(
+                            event.title || "予定"
+                        )}
+                    </h4>
+
+                    ${
+                        timeText
+                            ? `<p class="calendar-detail-time">
+                                🕐 ${timeText}
+                               </p>`
+                            : ""
+                    }
+
+                    ${
+                        event.content
+                            ? `<p>
+                                ${escapeHtml(event.content)}
+                               </p>`
+                            : ""
+                    }
+
+                </div>
+            `;
+
+        });
+
+    }
+
+
+    detailHtml += `
+        </div>
+    `;
+
+
+    const detailArea =
+        document.getElementById("calendarDetail");
+
+
+    if (detailArea) {
+
+        detailArea.innerHTML =
+            detailHtml;
+
+        detailArea.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+    }
+
+}
+
+
+// ==========================
+// 日付表示
+// ==========================
+
+function formatJapaneseDate(dateString) {
+
+    const parts =
+        dateString.split("-");
+
+    return `${parts[0]}年${Number(parts[1])}月${Number(parts[2])}日`;
 
 }
 

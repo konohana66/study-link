@@ -957,8 +957,14 @@ if (calendarSubmit) {
         const startDate =
             document.getElementById("calendarStartDate").value;
 
+        const startTime =
+            document.getElementById("calendarStartTime").value;
+
         const endDate =
             document.getElementById("calendarEndDate").value;
+
+        const endTime =
+            document.getElementById("calendarEndTime").value;
 
         const title =
             document.getElementById("calendarTitle").value.trim();
@@ -967,9 +973,9 @@ if (calendarSubmit) {
             document.getElementById("calendarContent").value.trim();
 
 
-        if (!startDate || !endDate || !title) {
+        if (!startDate || !startTime || !endDate || !endTime || !title) {
 
-            alert("開始日・終了日・タイトルを入力してください！");
+            alert("開始日・開始時間・終了日・終了時間・タイトルを入力してください！");
 
             return;
         }
@@ -995,8 +1001,14 @@ if (calendarSubmit) {
                 startDate:
                     startDate,
 
+                startTime:
+                    startTime,
+
                 endDate:
                     endDate,
+
+                endTime:
+                    endTime,
 
                 title:
                     title,
@@ -1238,10 +1250,16 @@ async function editCalendarEvent(row) {
         }
 
         document.getElementById("calendarStartDate").value =
-            formatInputDate(event.startDate);
+    formatInputDate(event.startDate);
 
-        document.getElementById("calendarEndDate").value =
-            formatInputDate(event.endDate);
+document.getElementById("calendarStartTime").value =
+    event.startTime || "";
+
+document.getElementById("calendarEndDate").value =
+    formatInputDate(event.endDate);
+
+document.getElementById("calendarEndTime").value =
+    event.endTime || "";
 
         document.getElementById("calendarTitle").value =
             event.title || "";
