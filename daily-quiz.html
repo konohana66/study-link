@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Link - 今日のチャレンジ</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .quiz-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        #progress {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #question {
+            text-align: center;
+            font-size: 22px;
+            margin: 25px 0;
+        }
+
+        #answers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .answer-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #f1f5f9;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        .answer-btn:hover {
+            opacity: 0.85;
+        }
+
+        #result {
+            text-align: center;
+            font-weight: bold;
+            min-height: 25px;
+            margin-top: 15px;
+        }
+
+        #finish {
+            display: none;
+            text-align: center;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="quiz-card">
+
+        <!-- クイズ画面 -->
+
+        <div id="quizArea">
+
+            <div id="progress"></div>
+
+            <h1 id="question">読み込み中...</h1>
+
+            <div id="answers"></div>
+
+            <div id="result"></div>
+
+        </div>
+
+
+        <!-- 終了画面 -->
+
+        <div id="finish">
+
+            <h1>🎉 チャレンジ終了！</h1>
+
+            <p id="score"></p>
+
+            <p id="xpResult"></p>
+
+            <a
+                href="daily.html"
+                class="back-button">
+                ← 今日のチャレンジに戻る
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="js/daily-quiz.js"></script>
+<script src="js/freeze-check.js?v=1"></script>
+
+</body>
+</html>

@@ -1,0 +1,882 @@
+﻿[
+    {
+        "subject":  "数学",
+        "question":  "-5 + 8",
+        "choices":  [
+                        "3",
+                        "-3",
+                        "13",
+                        "-13"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "7 + (-10)",
+        "choices":  [
+                        "-3",
+                        "3",
+                        "-17",
+                        "17"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "-9 - 4",
+        "choices":  [
+                        "-13",
+                        "13",
+                        "-5",
+                        "5"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "6 - (-3)",
+        "choices":  [
+                        "3",
+                        "9",
+                        "-3",
+                        "-9"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "数学",
+        "question":  "-7 + (-5)",
+        "choices":  [
+                        "-12",
+                        "12",
+                        "-2",
+                        "2"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-4) × 6",
+        "choices":  [
+                        "-24",
+                        "24",
+                        "-10",
+                        "10"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-8) × (-3)",
+        "choices":  [
+                        "-24",
+                        "24",
+                        "-11",
+                        "11"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "数学",
+        "question":  "24 ÷ (-6)",
+        "choices":  [
+                        "-4",
+                        "4",
+                        "-18",
+                        "18"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-35) ÷ (-5)",
+        "choices":  [
+                        "-7",
+                        "7",
+                        "-30",
+                        "30"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "数学",
+        "question":  "3 + (-8) - (-2)",
+        "choices":  [
+                        "-3",
+                        "-7",
+                        "3",
+                        "7"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "-4 × 3 + 5",
+        "choices":  [
+                        "-7",
+                        "7",
+                        "-17",
+                        "17"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-18) ÷ 3 - 2",
+        "choices":  [
+                        "-8",
+                        "-4",
+                        "4",
+                        "8"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "x = 4 のとき、2x + 3 の値は？",
+        "choices":  [
+                        "7",
+                        "8",
+                        "11",
+                        "14"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "数学",
+        "question":  "x = -2 のとき、3x - 1 の値は？",
+        "choices":  [
+                        "-7",
+                        "-5",
+                        "5",
+                        "7"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "5x + 2x を簡単にすると？",
+        "choices":  [
+                        "7x",
+                        "10x",
+                        "7x²",
+                        "3x"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "8a - 3a を簡単にすると？",
+        "choices":  [
+                        "5a",
+                        "5",
+                        "11a",
+                        "24a"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-3)² の値は？",
+        "choices":  [
+                        "-9",
+                        "6",
+                        "9",
+                        "-6"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "数学",
+        "question":  "2 × (-5 + 8) の値は？",
+        "choices":  [
+                        "6",
+                        "-6",
+                        "16",
+                        "11"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "(-12) + 7 - 3 の値は？",
+        "choices":  [
+                        "-8",
+                        "-2",
+                        "2",
+                        "8"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "数学",
+        "question":  "15 - 4 × 3 の値は？",
+        "choices":  [
+                        "33",
+                        "27",
+                        "3",
+                        "-3"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "I ___ a student.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "英語",
+        "question":  "You ___ my friend.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "He ___ a teacher.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "She ___ happy.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "We ___ students.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "They ___ teachers.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "I ___ soccer.",
+        "choices":  [
+                        "play",
+                        "plays",
+                        "playing",
+                        "played"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "英語",
+        "question":  "You ___ English.",
+        "choices":  [
+                        "like",
+                        "likes",
+                        "liking",
+                        "liked"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "英語",
+        "question":  "He ___ soccer every day.",
+        "choices":  [
+                        "play",
+                        "plays",
+                        "playing",
+                        "played"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "She ___ English every day.",
+        "choices":  [
+                        "study",
+                        "studies",
+                        "studying",
+                        "studied"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "I ___ not a teacher.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "do"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "英語",
+        "question":  "He ___ not a student.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "do"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "They ___ not play tennis.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "do"
+                    ],
+        "answer":  3
+    },
+    {
+        "subject":  "英語",
+        "question":  "___ you a student?",
+        "choices":  [
+                        "Are",
+                        "Is",
+                        "Am",
+                        "Do"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "英語",
+        "question":  "___ he your brother?",
+        "choices":  [
+                        "Are",
+                        "Is",
+                        "Am",
+                        "Do"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "I ___ soccer yesterday.",
+        "choices":  [
+                        "play",
+                        "played",
+                        "plays",
+                        "playing"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "He ___ to school yesterday.",
+        "choices":  [
+                        "go",
+                        "goes",
+                        "went",
+                        "going"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "We ___ TV last night.",
+        "choices":  [
+                        "watch",
+                        "watches",
+                        "watched",
+                        "watching"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "英語",
+        "question":  "Tom ___ my brother.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "英語",
+        "question":  "I ___ from Japan.",
+        "choices":  [
+                        "am",
+                        "is",
+                        "are",
+                        "be"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "光がまっすぐ進むことを何という？",
+        "choices":  [
+                        "光の反射",
+                        "光の屈折",
+                        "光の直進",
+                        "光の分散"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "理科",
+        "question":  "光が鏡などの表面ではね返ることを何という？",
+        "choices":  [
+                        "屈折",
+                        "反射",
+                        "直進",
+                        "分散"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "物質をつくっている最小の粒子を何という？",
+        "choices":  [
+                        "原子",
+                        "細胞",
+                        "組織",
+                        "器官"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "植物が光合成を行う主な場所はどこ？",
+        "choices":  [
+                        "根",
+                        "茎",
+                        "葉",
+                        "花"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "理科",
+        "question":  "植物が光合成で取り入れる気体は？",
+        "choices":  [
+                        "酸素",
+                        "二酸化炭素",
+                        "窒素",
+                        "水素"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "光合成で植物から放出される気体は？",
+        "choices":  [
+                        "酸素",
+                        "二酸化炭素",
+                        "窒素",
+                        "水素"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "地球をおおう空気の層を何という？",
+        "choices":  [
+                        "大気",
+                        "地殻",
+                        "マントル",
+                        "核"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "水が沸騰する温度は標準大気圧で何℃？",
+        "choices":  [
+                        "0℃",
+                        "50℃",
+                        "100℃",
+                        "150℃"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "理科",
+        "question":  "水が氷になる変化を何という？",
+        "choices":  [
+                        "融解",
+                        "凝固",
+                        "蒸発",
+                        "凝縮"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "氷が水になる変化を何という？",
+        "choices":  [
+                        "融解",
+                        "凝固",
+                        "蒸発",
+                        "凝縮"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "水蒸気が水になる変化を何という？",
+        "choices":  [
+                        "融解",
+                        "凝固",
+                        "蒸発",
+                        "凝縮"
+                    ],
+        "answer":  3
+    },
+    {
+        "subject":  "理科",
+        "question":  "音を伝えるものを何という？",
+        "choices":  [
+                        "媒質",
+                        "光源",
+                        "電源",
+                        "磁石"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "音の大きさに関係するのは何？",
+        "choices":  [
+                        "振幅",
+                        "振動数",
+                        "温度",
+                        "質量"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "音の高さに関係するのは何？",
+        "choices":  [
+                        "振幅",
+                        "振動数",
+                        "温度",
+                        "密度"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "植物の根から吸収された水が通る管を何という？",
+        "choices":  [
+                        "師管",
+                        "道管",
+                        "気孔",
+                        "葉脈"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "葉でつくられた養分が運ばれる管を何という？",
+        "choices":  [
+                        "師管",
+                        "道管",
+                        "気孔",
+                        "根毛"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "空気中の水蒸気が水滴になって現れることを何という？",
+        "choices":  [
+                        "蒸発",
+                        "凝結",
+                        "融解",
+                        "凝固"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "地震が地下で発生した場所を何という？",
+        "choices":  [
+                        "震央",
+                        "震源",
+                        "断層",
+                        "火口"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "理科",
+        "question":  "震源の真上の地表の地点を何という？",
+        "choices":  [
+                        "震央",
+                        "震源",
+                        "断層",
+                        "震度"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "理科",
+        "question":  "地震の揺れの大きさを表すものは？",
+        "choices":  [
+                        "震源",
+                        "震央",
+                        "震度",
+                        "マグニチュード"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本国憲法が施行されたのは何年？",
+        "choices":  [
+                        "1945年",
+                        "1946年",
+                        "1947年",
+                        "1948年"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "社会",
+        "question":  "政治の最終的な決定権が国民にあることを何という？",
+        "choices":  [
+                        "基本的人権",
+                        "国民主権",
+                        "平和主義",
+                        "地方自治"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本国憲法の基本原理の一つはどれ？",
+        "choices":  [
+                        "国民主権",
+                        "鎖国",
+                        "身分制度",
+                        "軍国主義"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本国憲法第9条と深く関係する考え方は？",
+        "choices":  [
+                        "平和主義",
+                        "地方自治",
+                        "市場経済",
+                        "三権分立"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本国憲法で天皇は何とされている？",
+        "choices":  [
+                        "政治の最高責任者",
+                        "日本国の象徴",
+                        "国会議員",
+                        "裁判官"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "国会は何権を担当する機関？",
+        "choices":  [
+                        "立法権",
+                        "行政権",
+                        "司法権",
+                        "財政権"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "内閣は何権を担当する機関？",
+        "choices":  [
+                        "立法権",
+                        "行政権",
+                        "司法権",
+                        "選挙権"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "裁判所は何権を担当する機関？",
+        "choices":  [
+                        "立法権",
+                        "行政権",
+                        "司法権",
+                        "外交権"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "社会",
+        "question":  "国会・内閣・裁判所に権力を分ける仕組みを何という？",
+        "choices":  [
+                        "地方自治",
+                        "三権分立",
+                        "直接民主制",
+                        "社会保障"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本の国会は何院制？",
+        "choices":  [
+                        "一院制",
+                        "二院制",
+                        "三院制",
+                        "四院制"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "衆議院と参議院のうち、任期が4年なのは？",
+        "choices":  [
+                        "衆議院",
+                        "参議院",
+                        "両方",
+                        "どちらでもない"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本の地方自治の基本的な考え方を何という？",
+        "choices":  [
+                        "地方自治",
+                        "中央集権",
+                        "鎖国",
+                        "身分制"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本の都道府県はいくつ？",
+        "choices":  [
+                        "43",
+                        "45",
+                        "47",
+                        "49"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本で最も面積が大きい都道府県は？",
+        "choices":  [
+                        "北海道",
+                        "岩手県",
+                        "長野県",
+                        "福島県"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "日本で最も大きい島は？",
+        "choices":  [
+                        "北海道",
+                        "本州",
+                        "九州",
+                        "四国"
+                    ],
+        "answer":  1
+    },
+    {
+        "subject":  "社会",
+        "question":  "1543年に日本に伝わったとされるものは？",
+        "choices":  [
+                        "鉄砲",
+                        "キリスト教",
+                        "活版印刷",
+                        "蒸気機関"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "1549年に日本へキリスト教を伝えた人物は？",
+        "choices":  [
+                        "ザビエル",
+                        "ペリー",
+                        "マルコ・ポーロ",
+                        "コロンブス"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "江戸幕府を開いた人物は？",
+        "choices":  [
+                        "織田信長",
+                        "豊臣秀吉",
+                        "徳川家康",
+                        "源頼朝"
+                    ],
+        "answer":  2
+    },
+    {
+        "subject":  "社会",
+        "question":  "鎌倉幕府を開いた人物は？",
+        "choices":  [
+                        "源頼朝",
+                        "徳川家康",
+                        "足利尊氏",
+                        "豊臣秀吉"
+                    ],
+        "answer":  0
+    },
+    {
+        "subject":  "社会",
+        "question":  "1868年に始まった大きな政治・社会の変化を何という？",
+        "choices":  [
+                        "明治維新",
+                        "大化の改新",
+                        "文明開化",
+                        "鎖国"
+                    ],
+        "answer":  0
+    }
+]

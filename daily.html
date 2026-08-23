@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Study Link - 今日のチャレンジ</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .daily-title {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .daily-subtitle {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .challenge-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .challenge-card h2 {
+            margin-top: 0;
+        }
+
+        .challenge-card p {
+            margin: 10px 0;
+        }
+
+        .challenge-info {
+            font-size: 14px;
+            margin: 15px 0;
+        }
+
+        .challenge-button {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+        }
+
+        .quick-button {
+            background: #e8f5e9;
+        }
+
+        .deep-button {
+            background: #fff3e0;
+        }
+
+        .back-button {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1 class="daily-title">🎯 今日のチャレンジ</h1>
+
+    <p class="daily-subtitle">
+        今日のおすすめ問題に挑戦しよう！
+    </p>
+
+
+    <!-- ==========================
+         さっとチャレンジ
+    =========================== -->
+
+    <div class="challenge-card">
+
+        <h2>⚡ さっとチャレンジ</h2>
+
+        <p>
+            短時間でサクッと挑戦！
+        </p>
+
+        <div class="challenge-info">
+            📝 5問<br>
+            ⏱️ すきま時間におすすめ
+        </div>
+
+        <button
+            class="challenge-button quick-button"
+            onclick="startChallenge(5)">
+            5問に挑戦する →
+        </button>
+
+    </div>
+
+
+    <!-- ==========================
+         じっくりチャレンジ
+    =========================== -->
+
+    <div class="challenge-card">
+
+        <h2>🔥 じっくりチャレンジ</h2>
+
+        <p>
+            今日はしっかり勉強しよう！
+        </p>
+
+        <div class="challenge-info">
+            📝 10問<br>
+            ⏱️ じっくり勉強したい人向け
+        </div>
+
+        <button
+            class="challenge-button deep-button"
+            onclick="startChallenge(10)">
+            10問に挑戦する →
+        </button>
+
+    </div>
+
+
+    <a href="study.html" class="back-button">
+        ← 学習ページに戻る
+    </a>
+
+</div>
+
+
+<script src="js/daily.js"></script>
+<script src="js/freeze-check.js?v=1"></script>
+
+</body>
+</html>
