@@ -1,4 +1,181 @@
 // =========================
+// 🔧 メンテナンスチェック
+// =========================
+
+const STUDYLINK_API =
+    "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec";
+
+async function checkMaintenance() {
+
+    // ログインしていなければ何もしない
+    const userId =
+        localStorage.getItem("userId");
+
+    if (!userId) return;
+
+    try {
+
+        // =========================
+        // メンテナンス状態取得
+        // =========================
+
+        const maintenanceResponse =
+            await fetch(
+                STUDYLINK_API +
+                "?type=maintenance"
+            );
+
+        const maintenance =
+            await maintenanceResponse.json();
+
+        console.log(
+            "🔧 メンテナンス状態:",
+            maintenance
+        );
+
+        if (
+            maintenance.result !== "success"
+        ) {
+            return;
+        }
+
+        // =========================
+        // メンテナンスOFF
+        // =========================
+
+        if (!maintenance.maintenance) {
+
+            return;
+
+        }
+
+        // =========================
+        // ユーザー情報取得
+        // =========================
+
+        const userResponse =
+            await fetch(
+                STUDYLINK_API +
+                "?type=user&userId=" +
+                encodeURIComponent(userId)
+            );
+
+        const user =
+            await userResponse.json();
+
+        console.log(
+            "👤 メンテナンス時ユーザー情報:",
+            user
+        );
+
+        // =========================
+        // 管理者か確認
+        // =========================
+
+        const isAdmin =
+            user.admin === true ||
+            String(user.admin).toUpperCase() === "TRUE";
+
+        // =========================
+        // 管理者
+        // =========================
+
+        if (isAdmin) {
+
+            showMaintenanceBanner(
+                maintenance.message
+            );
+
+            return;
+
+        }
+
+        // =========================
+        // 一般ユーザー
+        // =========================
+
+        location.href =
+            "maintenance.html";
+
+    } catch (error) {
+
+        console.error(
+            "メンテナンスチェックエラー:",
+            error
+        );
+
+    }
+
+}
+
+// =========================
+// 🔧 管理者用メンテナンス表示
+// =========================
+
+function showMaintenanceBanner(message) {
+
+    // すでに表示されていたら作らない
+    if (
+        document.getElementById(
+            "maintenanceBanner"
+        )
+    ) {
+        return;
+    }
+
+    const banner =
+        document.createElement("div");
+
+    banner.id =
+        "maintenanceBanner";
+
+    banner.innerHTML = `
+        🔧 メンテナンス中
+        <span>
+            ${escapeHtml(
+                message ||
+                "現在StudyLinkはメンテナンス中です。"
+            )}
+        </span>
+    `;
+
+    banner.style.position =
+        "fixed";
+
+    banner.style.top =
+        "0";
+
+    banner.style.left =
+        "0";
+
+    banner.style.right =
+        "0";
+
+    banner.style.zIndex =
+        "99999";
+
+    banner.style.padding =
+        "10px 15px";
+
+    banner.style.textAlign =
+        "center";
+
+    banner.style.background =
+        "#f59e0b";
+
+    banner.style.color =
+        "#ffffff";
+
+    banner.style.fontWeight =
+        "bold";
+
+    document.body.prepend(
+        banner
+    );
+
+}
+
+// =========================
 // お知らせ一覧
 // =========================
 
@@ -47,7 +224,8 @@ window.addEventListener("load", () => {
     loadTodaySchedule();
     loadGifts();
 
-    const loading = document.getElementById("loading");
+    const loading =
+        document.getElementById("loading");
 
     if (!loading) return;
 

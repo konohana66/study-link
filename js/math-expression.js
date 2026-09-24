@@ -18,6 +18,8 @@ let earnedXP = 0;
 let questionCount = 0;
 let quiz = [];
 
+let weaknessMode = false;
+
 
 // ====================
 // 学習時間
@@ -64,14 +66,27 @@ const xpResultElement =
 
 function startQuiz(count) {
 
-    questionCount = count;
+    const urlParams =
+        new URLSearchParams(
+            location.search
+        );
+
+    weaknessMode =
+        urlParams.get("mode") ===
+        "weakness";
+
+
+    questionCount =
+        count;
 
     currentQuestion = 0;
     score = 0;
     earnedXP = 0;
 
     quiz =
-        createQuiz(questionCount);
+        createQuiz(
+            questionCount
+        );
 
     studyStartTime =
         Date.now();
@@ -93,7 +108,8 @@ function startQuiz(count) {
 function randomInt(min, max) {
 
     return Math.floor(
-        Math.random() * (max - min + 1)
+        Math.random() *
+            (max - min + 1)
     ) + min;
 
 }
@@ -105,13 +121,132 @@ function randomInt(min, max) {
 
 function createQuiz(count) {
 
+    // ====================
+    // 弱点トレーニング
+    // ====================
+
+    if (weaknessMode) {
+
+        const weaknesses =
+            JSON.parse(
+                localStorage.getItem(
+                    "studyLinkWeaknesses"
+                ) || "{}"
+            );
+
+
+        const data =
+            weaknesses?.["数学"]?.["文字の式"];
+
+
+        if (
+            !data ||
+            !data.questions
+        ) {
+
+            return [];
+
+        }
+
+
+        const weakQuestions =
+            Object.entries(
+                data.questions
+            )
+                .filter(
+                    ([id, q]) =>
+                        q.level > 0
+                )
+                .sort(
+                    ([idA, a], [idB, b]) =>
+                        b.level - a.level
+                );
+
+
+        if (
+            weakQuestions.length === 0
+        ) {
+
+            return [];
+
+        }
+
+
+        const result = [];
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            const [
+                id,
+                q
+            ] =
+                weakQuestions[
+                    i %
+                    weakQuestions.length
+                ];
+
+
+            result.push({
+
+                id: id,
+
+                subject:
+                    "数学",
+
+                unit:
+                    "文字の式",
+
+                question:
+                    q.question,
+
+                choices:
+                    q.choices.map(
+                        String
+                    ),
+
+                answer:
+                    q.answer
+
+            });
+
+        }
+
+
+        return result;
+
+    }
+
+
+    // ====================
+    // 通常モード
+    // ====================
+
+    return createNormalQuiz(
+        count
+    );
+}
+
+
+// ====================
+// 通常問題生成
+// ====================
+
+function createNormalQuiz(count) {
+
     const quiz = [];
 
     const used =
         new Set();
 
 
-    while (quiz.length < count) {
+    while (
+        quiz.length < count
+    ) {
 
         const type =
             randomInt(1, 5);
@@ -241,7 +376,9 @@ function createQuiz(count) {
             `${question}|${answer}`;
 
 
-        if (used.has(key)) {
+        if (
+            used.has(key)
+        ) {
 
             continue;
 
@@ -263,6 +400,15 @@ function createQuiz(count) {
 
 
         quiz.push({
+
+            id:
+                `math-expression-${quiz.length + 1}`,
+
+            subject:
+                "数学",
+
+            unit:
+                "文字の式",
 
             question:
                 question,
@@ -307,12 +453,16 @@ function createChoices(
 
         // 数字問題
         if (
-            typeof answer === "number"
+            typeof answer ===
+            "number"
         ) {
 
             wrong =
                 answer +
-                randomInt(-5, 5);
+                randomInt(
+                    -5,
+                    5
+                );
 
         }
 
@@ -358,6 +508,265 @@ function createChoices(
 
 
 // ====================
+// 弱点データ更新
+// ====================
+
+function updateWeakness(correct) {
+
+    if (!weaknessMode) {
+        return;
+    }
+
+
+    const q =
+        quiz[currentQuestion];
+
+
+    if (!q) {
+        return;
+    }
+
+
+    const weaknesses =
+        JSON.parse(
+            localStorage.getItem(
+                "studyLinkWeaknesses"
+            ) || "{}"
+        );
+
+
+    if (!weaknesses["数学"]) {
+
+        weaknesses["数学"] = {};
+
+    }
+
+
+    if (
+        !weaknesses["数学"]["文字の式"]
+    ) {
+
+        weaknesses["数学"]["文字の式"] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            questions: {}
+
+        };
+
+    }
+
+
+    const data =
+        weaknesses["数学"]["文字の式"];
+
+
+    if (!data.questions) {
+
+        data.questions = {};
+
+    }
+
+
+    if (!data.questions[q.id]) {
+
+        data.questions[q.id] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            question:
+                q.question,
+
+            choices:
+                q.choices,
+
+            answer:
+                q.answer
+
+        };
+
+    }
+
+
+    const questionData =
+        data.questions[q.id];
+
+
+    if (correct) {
+
+        data.correct++;
+
+        questionData.correct++;
+
+        questionData.level =
+            Math.max(
+                0,
+                questionData.level - 1
+            );
+
+    }
+
+    else {
+
+        data.wrong++;
+
+        questionData.wrong++;
+
+        questionData.level =
+            Math.min(
+                5,
+                questionData.level + 1
+            );
+
+    }
+
+
+    const total =
+        data.correct +
+        data.wrong;
+
+
+    if (total > 0) {
+
+        const accuracy =
+            data.correct /
+            total;
+
+
+        if (
+            accuracy >= 0.9
+        ) {
+
+            data.level = 0;
+
+        }
+
+        else if (
+            accuracy >= 0.75
+        ) {
+
+            data.level = 1;
+
+        }
+
+        else if (
+            accuracy >= 0.6
+        ) {
+
+            data.level = 2;
+
+        }
+
+        else if (
+            accuracy >= 0.4
+        ) {
+
+            data.level = 3;
+
+        }
+
+        else {
+
+            data.level = 4;
+
+        }
+
+    }
+
+
+    localStorage.setItem(
+        "studyLinkWeaknesses",
+        JSON.stringify(
+            weaknesses
+        )
+    );
+
+}
+
+
+// ====================
+// 問題結果保存
+// ====================
+
+function saveQuestionResult(
+    q,
+    correct
+) {
+
+    const userId =
+        localStorage.getItem(
+            "userId"
+        );
+
+
+    if (!userId) {
+        return;
+    }
+
+
+    try {
+
+        fetch(
+            GAS_URL,
+            {
+
+                method:
+                    "POST",
+
+                body:
+                    JSON.stringify({
+
+                        type:
+                            "saveQuestionResult",
+
+                        userId:
+                            userId,
+
+                        subject:
+                            "数学",
+
+                        unit:
+                            "文字の式",
+
+                        question:
+                            q.question,
+
+                        correct:
+                            correct,
+
+                        source:
+                            weaknessMode
+                                ? "weakness"
+                                : "normal"
+
+                    })
+
+            }
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "問題結果の保存に失敗しました。",
+            error
+        );
+
+    }
+
+}
+
+
+// ====================
 // 問題表示
 // ====================
 
@@ -365,6 +774,15 @@ function showQuestion() {
 
     const q =
         quiz[currentQuestion];
+
+
+    if (!q) {
+
+        finishQuiz();
+
+        return;
+
+    }
 
 
     progress.textContent =
@@ -385,58 +803,66 @@ function showQuestion() {
 
     const choices =
         q.choices
-            .map((choice, index) => ({
+            .map(
+                (
+                    choice,
+                    index
+                ) => ({
 
-                choice,
+                    choice,
 
-                correct:
-                    index === q.answer
+                    correct:
+                        index ===
+                        q.answer
 
-            }))
+                })
+            )
             .sort(
                 () =>
                     Math.random() - 0.5
             );
 
 
-    choices.forEach(item => {
+    choices.forEach(
+        item => {
 
-        const button =
-            document.createElement(
-                "button"
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.className =
+                "answer-btn";
+
+
+            button.textContent =
+                item.choice;
+
+
+            button.dataset.correct =
+                item.correct;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    checkAnswer(
+                        item.correct,
+                        button
+                    );
+
+                }
             );
 
 
-        button.className =
-            "answer-btn";
+            answersElement.appendChild(
+                button
+            );
 
-
-        button.textContent =
-            item.choice;
-
-
-        button.dataset.correct =
-            item.correct;
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                checkAnswer(
-                    item.correct,
-                    button
-                );
-
-            }
-        );
-
-
-        answersElement.appendChild(
-            button
-        );
-
-    });
+        }
+    );
 
 }
 
@@ -456,27 +882,56 @@ function checkAnswer(
         );
 
 
-    buttons.forEach(button => {
+    buttons.forEach(
+        button => {
 
-        button.disabled =
-            true;
+            button.disabled =
+                true;
 
 
-        if (
-            button.dataset.correct ===
-            "true"
-        ) {
+            if (
+                button.dataset.correct ===
+                "true"
+            ) {
 
-            button.style.background =
-                "#4CAF50";
+                button.style.background =
+                    "#4CAF50";
 
-            button.style.color =
-                "white";
+                button.style.color =
+                    "white";
+
+            }
 
         }
+    );
 
-    });
 
+    const q =
+        quiz[currentQuestion];
+
+
+    // ====================
+    // 弱点データ更新
+    // ====================
+
+    updateWeakness(
+        correct
+    );
+
+
+    // ====================
+    // 問題結果保存
+    // ====================
+
+    saveQuestionResult(
+        q,
+        correct
+    );
+
+
+    // ====================
+    // 正解・不正解
+    // ====================
 
     if (correct) {
 
@@ -513,27 +968,30 @@ function checkAnswer(
     }
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        currentQuestion++;
+            currentQuestion++;
 
 
-        if (
-            currentQuestion >=
-            quiz.length
-        ) {
+            if (
+                currentQuestion >=
+                quiz.length
+            ) {
 
-            finishQuiz();
+                finishQuiz();
 
-        }
+            }
 
-        else {
+            else {
 
-            showQuestion();
+                showQuestion();
 
-        }
+            }
 
-    }, 800);
+        },
+        800
+    );
 
 }
 
@@ -586,6 +1044,86 @@ async function finishQuiz() {
 
 
     // ====================
+    // 弱点トレーニング時
+    // ====================
+
+    if (weaknessMode) {
+
+        const buttons =
+            finishArea.querySelectorAll(
+                "button"
+            );
+
+
+        buttons.forEach(
+            button => {
+
+                if (
+                    button.textContent.includes(
+                        "数学へ戻る"
+                    )
+                ) {
+
+                    button.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        const backButton =
+            document.createElement(
+                "button"
+            );
+
+
+        backButton.textContent =
+            "弱点トレーニングホームへ";
+
+
+        backButton.style.background =
+            "#2563eb";
+
+        backButton.style.color =
+            "white";
+
+        backButton.style.border =
+            "none";
+
+        backButton.style.padding =
+            "12px 20px";
+
+        backButton.style.borderRadius =
+            "10px";
+
+        backButton.style.cursor =
+            "pointer";
+
+        backButton.style.marginTop =
+            "15px";
+
+
+        backButton.addEventListener(
+            "click",
+            () => {
+
+                location.href =
+                    "weakness.html";
+
+            }
+        );
+
+
+        finishArea.appendChild(
+            backButton
+        );
+
+    }
+
+
+    // ====================
     // ユーザーID
     // ====================
 
@@ -616,7 +1154,8 @@ async function finishQuiz() {
                 GAS_URL,
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
                     body:
                         JSON.stringify({
@@ -670,7 +1209,8 @@ async function finishQuiz() {
                     GAS_URL,
                     {
 
-                        method: "POST",
+                        method:
+                            "POST",
 
                         body:
                             JSON.stringify({
@@ -719,5 +1259,35 @@ async function finishQuiz() {
         }
 
     }
+
+}
+
+
+// ====================
+// 弱点トレーニング自動開始
+// ====================
+
+const urlParams =
+    new URLSearchParams(
+        location.search
+    );
+
+
+const isWeaknessMode =
+    urlParams.get("mode") ===
+    "weakness";
+
+
+if (isWeaknessMode) {
+
+    const count =
+        Number(
+            urlParams.get("count")
+        ) || 10;
+
+
+    startQuiz(
+        count
+    );
 
 }

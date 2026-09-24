@@ -17,6 +17,7 @@ let earnedXP = 0;
 
 let questionCount = 0;
 let quiz = [];
+let weaknessMode = false;
 
 let studyStartTime = null;
 
@@ -59,7 +60,18 @@ const xpResultElement =
 
 function startQuiz(count) {
 
-    questionCount = count;
+    weaknessMode =
+        new URLSearchParams(location.search)
+            .get("mode") === "weakness";
+
+    const urlCount =
+        new URLSearchParams(location.search)
+            .get("count");
+
+    questionCount =
+        weaknessMode && urlCount
+            ? Number(urlCount)
+            : count;
 
     currentQuestion = 0;
     score = 0;
@@ -100,6 +112,101 @@ function randomInt(min, max) {
 
 function createQuiz(count) {
 
+    // ====================
+    // 弱点モード
+    // ====================
+
+    if (weaknessMode) {
+
+        const weaknesses =
+            JSON.parse(
+                localStorage.getItem(
+                    "studyLinkWeaknesses"
+                ) || "{}"
+            );
+
+        const unitData =
+            weaknesses?.["数学"]?.["方程式"];
+
+        const weakQuestions =
+            unitData?.questions
+                ? Object.values(
+                    unitData.questions
+                ).filter(
+                    q => q.level > 0
+                )
+                : [];
+
+        // 弱点問題がない場合
+        if (weakQuestions.length === 0) {
+            return createNormalQuiz(count);
+        }
+
+        // 弱点レベルが高い順
+        weakQuestions.sort(
+            (a, b) =>
+                b.level - a.level
+        );
+
+        const selected = [];
+
+        while (selected.length < count) {
+
+            selected.push(
+                weakQuestions[
+                    selected.length %
+                    weakQuestions.length
+                ]
+            );
+
+        }
+
+        return selected.map(q => ({
+
+            id:
+                q.id,
+
+            subject:
+                "数学",
+
+            unit:
+                "方程式",
+
+            question:
+                q.question,
+
+            choices:
+                q.choices,
+
+            answer:
+                q.answer,
+
+            correctAnswer:
+                q.choices[q.answer],
+
+            explanation:
+                `この方程式を解くと、x = ${q.choices[q.answer]} になります。`
+
+        }));
+
+    }
+
+
+    // ====================
+    // 通常モード
+    // ====================
+
+    return createNormalQuiz(count);
+
+}
+
+
+// ====================
+// 通常問題を作成
+// ====================
+
+function createNormalQuiz(count) {
+
     const quiz = [];
 
     const used = new Set();
@@ -129,7 +236,6 @@ function createQuiz(count) {
             const b =
                 x + a;
 
-
             question =
                 `x ${a >= 0 ? "+" : "-"} ${Math.abs(a)} = ${b} のとき、x = ?`;
 
@@ -153,7 +259,6 @@ function createQuiz(count) {
 
             const b =
                 a * x;
-
 
             question =
                 `${a}x = ${b} のとき、x = ?`;
@@ -182,7 +287,6 @@ function createQuiz(count) {
             const c =
                 a * x + b;
 
-
             question =
                 `${a}x ${b >= 0 ? "+" : "-"} ${Math.abs(b)} = ${c} のとき、x = ?`;
 
@@ -210,7 +314,6 @@ function createQuiz(count) {
             const c =
                 a * (x + b);
 
-
             question =
                 `${a}(x ${b >= 0 ? "+" : "-"} ${Math.abs(b)}) = ${c} のとき、x = ?`;
 
@@ -226,7 +329,6 @@ function createQuiz(count) {
 
         const key =
             `${question}|${answer}`;
-
 
         if (used.has(key)) {
             continue;
@@ -249,7 +351,6 @@ function createQuiz(count) {
             const wrong =
                 answer +
                 randomInt(-5, 5);
-
 
             if (
                 !choices.includes(
@@ -274,6 +375,15 @@ function createQuiz(count) {
 
         quiz.push({
 
+            id:
+                `math-equation-${quiz.length + 1}`,
+
+            subject:
+                "数学",
+
+            unit:
+                "方程式",
+
             question:
                 question,
 
@@ -283,7 +393,13 @@ function createQuiz(count) {
             answer:
                 choices.indexOf(
                     String(answer)
-                )
+                ),
+
+            correctAnswer:
+                String(answer),
+
+            explanation:
+                `この方程式を解くと、x = ${answer} になります。`
 
         });
 
@@ -291,6 +407,7 @@ function createQuiz(count) {
 
 
     return quiz;
+
 }
 
 
@@ -377,6 +494,122 @@ function showQuestion() {
 
 
 // ====================
+// 弱点データを更新
+// ====================
+
+function updateWeakness(correct) {
+
+    const q =
+        quiz[currentQuestion];
+
+    if (!q || !q.subject || !q.unit) {
+        return;
+    }
+
+    let weaknesses =
+        JSON.parse(
+            localStorage.getItem(
+                "studyLinkWeaknesses"
+            ) || "{}"
+        );
+
+    if (!weaknesses[q.subject]) {
+        weaknesses[q.subject] = {};
+    }
+
+    if (!weaknesses[q.subject][q.unit]) {
+
+        weaknesses[q.subject][q.unit] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            questions: {}
+
+        };
+
+    }
+
+    const data =
+        weaknesses[q.subject][q.unit];
+
+
+    if (!data.questions) {
+        data.questions = {};
+    }
+
+
+    if (!data.questions[q.id]) {
+
+        data.questions[q.id] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            question:
+                q.question,
+
+            choices:
+                q.choices,
+
+            answer:
+                q.answer
+
+        };
+
+    }
+
+
+    const questionData =
+        data.questions[q.id];
+
+
+    if (correct) {
+
+        data.correct++;
+
+        data.level =
+            Math.max(
+                0,
+                data.level - 1
+            );
+
+        questionData.correct++;
+
+        questionData.level =
+            Math.max(
+                0,
+                questionData.level - 1
+            );
+
+    } else {
+
+        data.wrong++;
+
+        data.level++;
+
+        questionData.wrong++;
+
+        questionData.level++;
+
+    }
+
+
+    localStorage.setItem(
+        "studyLinkWeaknesses",
+        JSON.stringify(weaknesses)
+    );
+
+}
+
+
+// ====================
 // 答え合わせ
 // ====================
 
@@ -414,21 +647,30 @@ function checkAnswer(
 
     if (correct) {
 
+        updateWeakness(true);
+
         score++;
 
         earnedXP += 5;
 
 
         resultElement.textContent =
-            "⭕ 正解！ +5 XP";
-
+            "✅ 正解！ +5 XP";
 
         resultElement.style.color =
             "#16a34a";
 
-    }
 
-    else {
+        saveQuestionResult(
+            true,
+            clickedButton.textContent
+        );
+
+
+    } else {
+
+        updateWeakness(false);
+
 
         clickedButton.style.background =
             "#f44336";
@@ -440,9 +682,14 @@ function checkAnswer(
         resultElement.textContent =
             "❌ 不正解！";
 
-
         resultElement.style.color =
             "#dc2626";
+
+
+        saveQuestionResult(
+            false,
+            clickedButton.textContent
+        );
 
     }
 
@@ -459,15 +706,84 @@ function checkAnswer(
 
             finishQuiz();
 
-        }
-
-        else {
+        } else {
 
             showQuestion();
 
         }
 
     }, 800);
+
+}
+
+
+// ====================
+// 回答履歴保存
+// ====================
+
+function saveQuestionResult(
+    correct,
+    answer
+) {
+
+    const q =
+        quiz[currentQuestion];
+
+
+    if (!q) {
+        return;
+    }
+
+
+    fetch(
+        GAS_URL,
+        {
+
+            method:
+                "POST",
+
+            body:
+                JSON.stringify({
+
+                    type:
+                        "saveQuestionResult",
+
+                    userId:
+                        localStorage.getItem(
+                            "userId"
+                        ) || "",
+
+                    questionId:
+                        q.id,
+
+                    subject:
+                        q.subject,
+
+                    unit:
+                        q.unit,
+
+                    correct:
+                        correct,
+
+                    answer:
+                        answer,
+
+                    source:
+                        weaknessMode
+                            ? "weakness"
+                            : "normal"
+
+                })
+
+        }
+    ).catch(error => {
+
+        console.error(
+            "問題回答履歴保存エラー:",
+            error
+        );
+
+    });
 
 }
 
@@ -520,11 +836,98 @@ async function finishQuiz() {
 
 
     // ====================
+    // 弱点モード終了
+    // ====================
+
+    if (weaknessMode) {
+
+        const buttons =
+            finishArea.querySelectorAll(
+                "a, button"
+            );
+
+
+        buttons.forEach(button => {
+
+            if (
+                button.textContent.includes(
+                    "数学へ戻る"
+                )
+            ) {
+
+                button.style.display =
+                    "none";
+
+            }
+
+        });
+
+
+        const backButton =
+            document.createElement(
+                "button"
+            );
+
+
+        backButton.textContent =
+            "弱点トレーニングホームへ";
+
+
+        backButton.style.marginTop =
+            "20px";
+
+
+        backButton.style.padding =
+            "12px 20px";
+
+
+        backButton.style.border =
+            "none";
+
+
+        backButton.style.borderRadius =
+            "10px";
+
+
+        backButton.style.background =
+            "#2563eb";
+
+
+        backButton.style.color =
+            "white";
+
+
+        backButton.style.fontSize =
+            "16px";
+
+
+        backButton.style.cursor =
+            "pointer";
+
+
+        backButton.onclick = () => {
+
+            location.href =
+                "weakness.html";
+
+        };
+
+
+        finishArea.appendChild(
+            backButton
+        );
+
+    }
+
+
+    // ====================
     // ユーザーID
     // ====================
 
     const userId =
-        localStorage.getItem("userId");
+        localStorage.getItem(
+            "userId"
+        );
 
 
     if (!userId) {
@@ -544,26 +947,28 @@ async function finishQuiz() {
                 GAS_URL,
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        type:
-                            "saveStudyTime",
+                            type:
+                                "saveStudyTime",
 
-                        userId:
-                            userId,
+                            userId:
+                                userId,
 
-                        subject:
-                            "数学",
+                            subject:
+                                "数学",
 
-                        unit:
-                            "方程式",
+                            unit:
+                                "方程式",
 
-                        minutes:
-                            studyMinutes
+                            minutes:
+                                studyMinutes
 
-                    })
+                        })
 
                 }
             );
@@ -595,23 +1000,25 @@ async function finishQuiz() {
                     GAS_URL,
                     {
 
-                        method: "POST",
+                        method:
+                            "POST",
 
-                        body: JSON.stringify({
+                        body:
+                            JSON.stringify({
 
-                            type:
-                                "updateXP",
+                                type:
+                                    "updateXP",
 
-                            userId:
-                                userId,
+                                userId:
+                                    userId,
 
-                            xp:
-                                earnedXP
+                                xp:
+                                    earnedXP
 
-                        })
+                            })
 
-                    }
-                );
+                        }
+                    );
 
 
             const result =
@@ -632,7 +1039,9 @@ async function finishQuiz() {
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
 
             xpResultElement.textContent =
                 "⚠️ XPの保存に失敗しました。";
@@ -640,5 +1049,33 @@ async function finishQuiz() {
         }
 
     }
+
+}
+
+
+// ====================
+// 弱点モード自動開始
+// ====================
+
+const urlParams =
+    new URLSearchParams(
+        location.search
+    );
+
+
+const isWeaknessMode =
+    urlParams.get("mode") ===
+    "weakness";
+
+
+if (isWeaknessMode) {
+
+    const count =
+        Number(
+            urlParams.get("count")
+        ) || 10;
+
+
+    startQuiz(count);
 
 }

@@ -9,9 +9,42 @@
 <body>
 
 <script>
-if (localStorage.getItem("admin") !== "true") {
-    location.href = "admin-login.html";
+const userId = localStorage.getItem("userId");
+
+if (!userId) {
+    location.href = "../login.html";
 }
+
+const GAS_URL =
+    "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec";
+
+fetch(
+    GAS_URL +
+    "?type=user&userId=" +
+    encodeURIComponent(userId)
+)
+.then(response => response.json())
+.then(user => {
+
+    const isAdmin =
+        user.admin === true ||
+        String(user.admin).toUpperCase() === "TRUE";
+
+    if (!isAdmin) {
+        location.href = "../mypage.html";
+    }
+
+})
+.catch(error => {
+
+    console.error(
+        "管理者権限の確認に失敗しました",
+        error
+    );
+
+    location.href = "../mypage.html";
+
+});
 </script>
 
 <div class="admin-container">
@@ -51,9 +84,9 @@ if (localStorage.getItem("admin") !== "true") {
             ⚙️ 設定
         </button>
 
-        <button id="logout" class="logout-btn">
-            🚪 ログアウト
-        </button>
+        <button id="home" class="logout-btn">
+    🏠 ホームに戻る
+</button>
 
     </aside>
 
@@ -114,9 +147,28 @@ if (localStorage.getItem("admin") !== "true") {
 
         <div id="adminUserInfo"></div>
 
-        <hr>
+<hr>
 
-        <div class="danger-zone">
+<!-- 👑 管理者権限 -->
+<div id="adminPermissionArea">
+
+    <h2>👑 管理者権限</h2>
+
+    <p id="adminPermissionStatus">
+        権限を確認中...
+    </p>
+
+    <button
+        id="adminPermissionBtn"
+        type="button">
+        管理者権限を変更
+    </button>
+
+</div>
+
+<hr>
+
+<div class="danger-zone">
             <h2>🚨 非常用操作</h2>
 
             <p>アカウントを一時的に利用停止します。</p>
@@ -537,23 +589,269 @@ id="calendarSubmit">
 
 </section>
 
-        <!-- 投稿 -->
-        <section id="postPage" class="page" style="display:none;">
+        <!-- 投稿管理 -->
+<section id="postPage" class="page" style="display:none;">
 
-            <h1>📝 投稿管理</h1>
+    <h1>📝 投稿管理</h1>
 
-            <p>ここに投稿一覧を表示します。</p>
+    <!-- 検索 -->
+    <div class="post-search-area">
 
-        </section>
+        <input
+            type="text"
+            id="adminPostSearch"
+            placeholder="🔍 投稿を検索（タイトル・内容・投稿者）">
+
+        <button
+            class="save-btn"
+            id="adminPostSearchBtn">
+            🔍 検索
+        </button>
+
+        <button
+            class="post-reset-btn"
+            id="adminPostSearchReset">
+            リセット
+        </button>
+
+    </div>
+
+
+    <!-- カテゴリ -->
+    <div class="post-admin-tabs">
+
+        <button
+            class="post-tab active"
+            onclick="changeAdminPostCategory('school', this)">
+            🏫 学校
+        </button>
+
+        <button
+            class="post-tab"
+            onclick="changeAdminPostCategory('club', this)">
+            ⚽ 部活
+        </button>
+
+        <button
+            class="post-tab"
+            onclick="changeAdminPostCategory('all', this)">
+            📋 すべて
+        </button>
+
+    </div>
+
+
+    <!-- 投稿件数 -->
+    <div id="adminPostCount" class="admin-post-count">
+        投稿を読み込み中...
+    </div>
+
+
+    <!-- 投稿一覧 -->
+    <div id="adminPostList">
+        投稿を読み込み中...
+    </div>
+
+
+    <!-- 投稿詳細・編集 -->
+    <div
+        id="adminPostEditor"
+        class="admin-post-editor"
+        style="display:none;">
+
+        <button
+            type="button"
+            class="post-reset-btn"
+            onclick="closeAdminPostEditor()">
+            ← 投稿一覧に戻る
+        </button>
+
+        <h2>📝 投稿編集</h2>
+
+        <input
+            type="hidden"
+            id="adminEditPostId">
+
+
+        <label>
+            📂 カテゴリ
+        </label>
+
+        <select id="adminEditPostCategory">
+
+            <option value="school">
+                🏫 学校
+            </option>
+
+            <option value="club">
+                ⚽ 部活
+            </option>
+
+        </select>
+
+
+        <label>
+            🏷️ タイトル
+        </label>
+
+        <input
+            type="text"
+            id="adminEditPostTitle"
+            placeholder="タイトル">
+
+
+        <label>
+            👤 投稿者
+        </label>
+
+        <input
+            type="text"
+            id="adminEditPostName"
+            readonly>
+
+
+        <label>
+            📅 投稿日
+        </label>
+
+        <input
+            type="text"
+            id="adminEditPostDate"
+            readonly>
+
+
+        <label>
+            ❤️ いいね数
+        </label>
+
+        <input
+            type="text"
+            id="adminEditPostLikes"
+            readonly>
+
+
+        <label>
+            📝 内容
+        </label>
+
+        <textarea
+            id="adminEditPostContent"
+            placeholder="投稿内容"></textarea>
+
+
+        <!-- 画像プレビュー -->
+        <div id="adminEditPostImageArea">
+
+            <label>
+                🖼️ 画像
+            </label>
+
+            <div id="adminEditPostImage">
+                画像なし
+            </div>
+
+        </div>
+
+
+        <div class="admin-post-editor-actions">
+
+            <button
+                class="save-btn"
+                onclick="saveAdminPostEdit()">
+                💾 編集内容を保存
+            </button>
+
+            <button
+                class="danger-btn"
+                onclick="adminDeletePostFromEditor()">
+                🗑️ この投稿を削除
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
 
         <!-- 設定 -->
-        <section id="settingsPage" class="page" style="display:none;">
+<section id="settingsPage" class="page" style="display:none;">
 
-            <h1>⚙️ 設定</h1>
+    <h1>⚙️ 設定</h1>
 
-            <p>Study Link の設定画面です。</p>
+    <!-- ======================== -->
+    <!-- 🔧 メンテナンス設定 -->
+    <!-- ======================== -->
 
-        </section>
+    <div class="card">
+
+        <h2>🔧 メンテナンス設定</h2>
+
+        <p>
+            StudyLinkを一時的にメンテナンス状態にします。
+        </p>
+
+        <hr>
+
+        <!-- ON / OFF -->
+        <div class="maintenance-toggle">
+
+    <div class="maintenance-toggle-label">
+
+        <strong>🔧 メンテナンスモード</strong>
+
+        <span>
+            有効にすると一般ユーザーは利用できなくなります
+        </span>
+
+    </div>
+
+    <input
+        type="checkbox"
+        id="maintenanceEnabled"
+    >
+
+</div>
+
+        <br><br>
+
+        <!-- メッセージ -->
+        <label for="maintenanceMessage">
+            📝 メンテナンスメッセージ
+        </label>
+
+        <textarea
+            id="maintenanceMessage"
+            placeholder="現在StudyLinkはメンテナンス中です。"></textarea>
+
+        <br>
+
+        <!-- 終了予定 -->
+        <label for="maintenanceEndTime">
+            ⏰ 終了予定時刻
+        </label>
+
+        <input
+            type="datetime-local"
+            id="maintenanceEndTime">
+
+        <br><br>
+
+        <button
+            type="button"
+            class="save-btn"
+            id="maintenanceSaveBtn">
+            💾 メンテナンス設定を保存
+        </button>
+
+        <p
+            id="maintenanceStatus"
+            style="margin-top:15px;">
+            設定を読み込み中...
+        </p>
+
+    </div>
+
+</section>
 
     </main>
 

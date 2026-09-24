@@ -51,21 +51,15 @@ function showPage(pageName, button) {
 window.showPage = showPage;
 
 // ========================
-// ログアウト
+// ホームに戻る
 // ========================
-const logoutBtn = document.getElementById("logout");
+const homeBtn = document.getElementById("home");
 
-if (logoutBtn) {
+if (homeBtn) {
 
-    logoutBtn.onclick = () => {
+    homeBtn.onclick = () => {
 
-        if (confirm("ログアウトしますか？")) {
-
-            localStorage.removeItem("admin");
-
-            location.href = "admin-login.html";
-
-        }
+        location.href = "../index.html";
 
     };
 
@@ -1726,6 +1720,7 @@ window.closeAdminUserDetail = function() {
 };
 
 
+
 // ==========================
 // 🔒 凍結・凍結解除
 // ==========================
@@ -1819,6 +1814,107 @@ if (freezeUserBtn) {
 }
 
 // ==========================
+// 👑 管理者権限
+// ==========================
+
+const adminPermissionBtn =
+    document.getElementById("adminPermissionBtn");
+
+const adminPermissionStatus =
+    document.getElementById("adminPermissionStatus");
+
+if (adminPermissionBtn) {
+
+    adminPermissionBtn.onclick = async function() {
+
+        if (!currentAdminUserId) {
+            alert("ユーザーが選択されていません");
+            return;
+        }
+
+        const currentIsAdmin =
+            adminPermissionBtn.dataset.admin === "true";
+
+        const newAdminState =
+            !currentIsAdmin;
+
+        const message = newAdminState
+            ? "このユーザーに管理者権限を付与しますか？"
+            : "このユーザーの管理者権限を解除しますか？";
+
+        if (!confirm(message)) {
+            return;
+        }
+
+        adminPermissionBtn.disabled = true;
+        adminPermissionBtn.textContent = "処理中...";
+
+        try {
+
+            const response = await fetch(
+                "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+                        type: "setAdmin",
+                        userId: currentAdminUserId,
+                        isAdmin: newAdminState
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            console.log(
+                "👑 管理者権限変更結果:",
+                result
+            );
+
+            if (result.result === "success") {
+
+                alert(
+                    newAdminState
+                        ? "👑 管理者権限を付与しました！"
+                        : "🔓 管理者権限を解除しました！"
+                );
+
+                await showAdminUserDetail(
+                    currentAdminUserId
+                );
+
+            } else {
+
+                alert(
+                    result.message ||
+                    "管理者権限の変更に失敗しました"
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "管理者権限変更エラー:",
+                error
+            );
+
+            alert(
+                "通信エラーが発生しました"
+            );
+
+        } finally {
+
+            adminPermissionBtn.disabled = false;
+
+        }
+
+    };
+
+}
+
+// ==========================
 // 👤 ユーザー詳細
 // ==========================
 
@@ -1879,6 +1975,41 @@ async function showAdminUserDetail(userId) {
 
             return;
         }
+
+        // ==========================
+// 👑 管理者権限状態
+// ==========================
+
+const adminBtn =
+    document.getElementById("adminPermissionBtn");
+
+const adminStatus =
+    document.getElementById("adminPermissionStatus");
+
+if (adminBtn) {
+
+    const isAdmin =
+        user.admin === true ||
+        String(user.admin).toUpperCase() === "TRUE";
+
+    adminBtn.dataset.admin =
+        isAdmin ? "true" : "false";
+
+    adminBtn.textContent =
+        isAdmin
+            ? "🔓 管理者権限を解除"
+            : "👑 管理者権限を付与";
+
+    if (adminStatus) {
+
+        adminStatus.textContent =
+            isAdmin
+                ? "現在：👑 管理者"
+                : "現在：👤 一般ユーザー";
+
+    }
+
+}
 
 
         // ==========================
@@ -1989,6 +2120,1147 @@ function closeAdminUserDetail() {
     currentAdminUserId = null;
 }
 
+// ==========================
+// 📝 投稿管理
+// ==========================
+
+let currentAdminPostCategory = "school";
+
+
+// ==========================
+// 投稿カテゴリ切り替え
+// ==========================
+
+function changeAdminPostCategory(category, button) {
+
+    currentAdminPostCategory = category;
+
+    document
+        .querySelectorAll(".post-tab")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    loadAdminPosts();
+}
+
+
+// ==========================
+// 📝 投稿管理
+// ==========================
+
+let allAdminPosts = [];
+let currentEditingPost = null;
+
+
+// ==========================
+// 投稿カテゴリ切り替え
+// ==========================
+
+function changeAdminPostCategory(category, button) {
+
+    currentAdminPostCategory = category;
+
+    document
+        .querySelectorAll(".post-tab")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    renderAdminPosts();
+}
+
+
+// ==========================
+// 投稿一覧取得
+// ==========================
+
+async function loadAdminPosts() {
+
+    const list =
+        document.getElementById("adminPostList");
+
+    if (!list) return;
+
+    list.innerHTML =
+        "<p>投稿を読み込み中...</p>";
+
+    try {
+
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec?type=posts"
+        );
+
+        if (!response.ok) {
+            throw new Error(
+                "HTTP error: " + response.status
+            );
+        }
+
+        const posts = await response.json();
+
+        console.log("📝 管理者用投稿一覧:", posts);
+
+        if (!Array.isArray(posts)) {
+
+            list.innerHTML =
+                "<p>投稿データの形式が正しくありません。</p>";
+
+            return;
+        }
+
+        allAdminPosts = posts;
+
+        renderAdminPosts();
+
+    } catch (error) {
+
+        console.error(
+            "投稿一覧取得エラー:",
+            error
+        );
+
+        list.innerHTML =
+            "<p>投稿一覧の取得に失敗しました。</p>";
+
+    }
+}
+
+
+// ==========================
+// 投稿一覧表示
+// ==========================
+
+function renderAdminPosts() {
+
+    const list =
+        document.getElementById("adminPostList");
+
+    const count =
+        document.getElementById("adminPostCount");
+
+    if (!list) return;
+
+
+    // ==========================
+    // 検索文字
+    // ==========================
+
+    const searchInput =
+        document.getElementById("adminPostSearch");
+
+    const searchWord =
+        searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
+
+
+    // ==========================
+    // カテゴリ絞り込み
+    // ==========================
+
+    let filteredPosts =
+        [...allAdminPosts];
+
+    if (currentAdminPostCategory !== "all") {
+
+        filteredPosts =
+            filteredPosts.filter(
+                post =>
+                    post.category ===
+                    currentAdminPostCategory
+            );
+
+    }
+
+
+    // ==========================
+    // 検索
+    // ==========================
+
+    if (searchWord) {
+
+        filteredPosts =
+            filteredPosts.filter(post => {
+
+                const title =
+                    String(post.title || "")
+                        .toLowerCase();
+
+                const content =
+                    String(post.content || "")
+                        .toLowerCase();
+
+                const name =
+                    String(post.name || "")
+                        .toLowerCase();
+
+                const userId =
+                    String(post.userId || "")
+                        .toLowerCase();
+
+                return (
+                    title.includes(searchWord) ||
+                    content.includes(searchWord) ||
+                    name.includes(searchWord) ||
+                    userId.includes(searchWord)
+                );
+
+            });
+
+    }
+
+
+    // ==========================
+    // 件数
+    // ==========================
+
+    if (count) {
+
+        count.textContent =
+            `📋 ${filteredPosts.length}件の投稿`;
+
+    }
+
+
+    list.innerHTML = "";
+
+
+    if (filteredPosts.length === 0) {
+
+        list.innerHTML =
+            "<p>該当する投稿はありません。</p>";
+
+        return;
+
+    }
+
+
+    // 新しい投稿を上に
+    filteredPosts
+        .slice()
+        .reverse()
+        .forEach(post => {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "admin-post-card";
+
+
+            // カテゴリ
+            let categoryText =
+                "📋 その他";
+
+            if (post.category === "school") {
+                categoryText = "🏫 学校";
+            }
+
+            if (post.category === "club") {
+                categoryText = "⚽ 部活";
+            }
+
+
+            // 投稿日
+            let postDate = "";
+
+            if (post.date) {
+
+                const date =
+                    new Date(post.date);
+
+                if (!isNaN(date.getTime())) {
+
+                    postDate =
+                        date.toLocaleString(
+                            "ja-JP"
+                        );
+
+                }
+
+            }
+
+
+            // 画像
+            let imageHTML = "";
+
+            if (post.image) {
+
+                imageHTML = `
+                    <div class="admin-post-image-area">
+
+                        <p>🖼️ 画像</p>
+
+                        <img
+                            src="${escapeAdminHtml(post.image)}"
+                            class="admin-post-image"
+                            alt="投稿画像">
+
+                    </div>
+                `;
+
+            } else {
+
+                imageHTML = `
+                    <div class="admin-post-no-image">
+                        🖼️ 画像なし
+                    </div>
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="admin-post-header">
+
+                    <div>
+
+                        <strong>
+                            👤 ${escapeAdminHtml(post.name || "名前なし")}
+                        </strong>
+
+                        <small>
+                            📅 ${escapeAdminHtml(postDate)}
+                        </small>
+
+                    </div>
+
+                    <span class="admin-post-category">
+                        ${categoryText}
+                    </span>
+
+                </div>
+
+
+                <h3>
+                    ${escapeAdminHtml(post.title || "タイトルなし")}
+                </h3>
+
+
+                <p class="admin-post-content">
+                    ${escapeAdminHtml(post.content || "")}
+                </p>
+
+
+                ${imageHTML}
+
+
+                <div class="admin-post-info">
+
+                    <span>
+                        ❤️ ${Number(post.likes) || 0}
+                    </span>
+
+                    <span>
+                        🆔 ${escapeAdminHtml(String(post.id || ""))}
+                    </span>
+
+                </div>
+
+
+                <div class="admin-post-actions">
+
+                    <button
+                        class="save-btn"
+                        onclick="adminEditPost(${Number(post.id)})">
+
+                        ✏️ 編集
+
+                    </button>
+
+
+                    <button
+                        class="danger-btn"
+                        onclick="adminDeletePost(${Number(post.id)})">
+
+                        🗑️ 削除
+
+                    </button>
+
+                </div>
+
+            `;
+
+            list.appendChild(card);
+
+        });
+
+}
+
+
+// ==========================
+// 🔍 投稿検索
+// ==========================
+
+const adminPostSearch =
+    document.getElementById("adminPostSearch");
+
+if (adminPostSearch) {
+
+    adminPostSearch.addEventListener(
+        "input",
+        () => {
+            renderAdminPosts();
+        }
+    );
+
+}
+
+
+// ==========================
+// 検索リセット
+// ==========================
+
+const adminPostSearchReset =
+    document.getElementById(
+        "adminPostSearchReset"
+    );
+
+if (adminPostSearchReset) {
+
+    adminPostSearchReset.onclick = () => {
+
+        if (adminPostSearch) {
+            adminPostSearch.value = "";
+        }
+
+        renderAdminPosts();
+
+    };
+
+}
+
+
+// ==========================
+// ✏️ 投稿編集画面
+// ==========================
+
+async function adminEditPost(id) {
+
+    const post =
+        allAdminPosts.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+    if (!post) {
+
+        alert(
+            "投稿が見つかりません。"
+        );
+
+        return;
+
+    }
+
+
+    currentEditingPost = post;
+
+
+    const list =
+        document.getElementById(
+            "adminPostList"
+        );
+
+    const editor =
+        document.getElementById(
+            "adminPostEditor"
+        );
+
+    if (!editor) return;
+
+
+    if (list) {
+        list.style.display = "none";
+    }
+
+
+    editor.style.display = "block";
+
+
+    // ==========================
+    // 入力欄へセット
+    // ==========================
+
+    document.getElementById(
+        "adminEditPostId"
+    ).value =
+        post.id || "";
+
+
+    document.getElementById(
+        "adminEditPostCategory"
+    ).value =
+        post.category || "school";
+
+
+    document.getElementById(
+        "adminEditPostTitle"
+    ).value =
+        post.title || "";
+
+
+    document.getElementById(
+        "adminEditPostName"
+    ).value =
+        post.name || "名前なし";
+
+
+    document.getElementById(
+        "adminEditPostLikes"
+    ).value =
+        Number(post.likes) || 0;
+
+
+    let dateText = "";
+
+    if (post.date) {
+
+        const date =
+            new Date(post.date);
+
+        if (!isNaN(date.getTime())) {
+
+            dateText =
+                date.toLocaleString(
+                    "ja-JP"
+                );
+
+        }
+
+    }
+
+
+    document.getElementById(
+        "adminEditPostDate"
+    ).value =
+        dateText;
+
+
+    document.getElementById(
+        "adminEditPostContent"
+    ).value =
+        post.content || "";
+
+
+    // ==========================
+    // 画像
+    // ==========================
+
+    const imageArea =
+        document.getElementById(
+            "adminEditPostImage"
+        );
+
+    if (imageArea) {
+
+        if (post.image) {
+
+            imageArea.innerHTML = `
+
+                <img
+                    src="${escapeAdminHtml(post.image)}"
+                    class="admin-post-editor-image"
+                    alt="投稿画像">
+
+            `;
+
+        } else {
+
+            imageArea.innerHTML =
+                "<p>🖼️ 画像はありません。</p>";
+
+        }
+
+    }
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+// ==========================
+// 編集画面を閉じる
+// ==========================
+
+function closeAdminPostEditor() {
+
+    const list =
+        document.getElementById(
+            "adminPostList"
+        );
+
+    const editor =
+        document.getElementById(
+            "adminPostEditor"
+        );
+
+    if (editor) {
+
+        editor.style.display =
+            "none";
+
+    }
+
+    if (list) {
+
+        list.style.display =
+            "block";
+
+    }
+
+    currentEditingPost = null;
+
+}
+
+
+// HTML onclick用
+window.closeAdminPostEditor =
+    closeAdminPostEditor;
+
+
+// ==========================
+// 💾 編集内容を保存
+// ==========================
+
+async function saveAdminPostEdit() {
+
+    if (!currentEditingPost) {
+
+        alert(
+            "編集する投稿が選択されていません。"
+        );
+
+        return;
+
+    }
+
+
+    const id =
+        document.getElementById(
+            "adminEditPostId"
+        ).value;
+
+
+    const category =
+        document.getElementById(
+            "adminEditPostCategory"
+        ).value;
+
+
+    const title =
+        document.getElementById(
+            "adminEditPostTitle"
+        ).value.trim();
+
+
+    const content =
+        document.getElementById(
+            "adminEditPostContent"
+        ).value.trim();
+
+
+    if (!title) {
+
+        alert(
+            "タイトルを入力してください。"
+        );
+
+        return;
+
+    }
+
+
+    if (!content) {
+
+        alert(
+            "内容を入力してください。"
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * GAS側はまだ作らないため、
+     * 現時点では画面上のデータだけ更新する。
+     */
+
+    const post =
+        allAdminPosts.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    if (post) {
+
+        post.category =
+            category;
+
+        post.title =
+            title;
+
+        post.content =
+            content;
+
+    }
+
+
+    alert(
+        "編集内容を画面上に反映しました。\n\n※データベースへの保存はGAS側を接続したあと有効になります。"
+    );
+
+
+    closeAdminPostEditor();
+
+    renderAdminPosts();
+
+}
+
+
+// HTML onclick用
+window.saveAdminPostEdit =
+    saveAdminPostEdit;
+
+
+// ==========================
+// 🗑️ 投稿削除
+// ==========================
+
+async function adminDeletePost(id) {
+
+    const post =
+        allAdminPosts.find(
+            item =>
+                Number(item.id) ===
+                Number(id)
+        );
+
+
+    const postTitle =
+        post
+            ? post.title
+            : "この投稿";
+
+
+    if (
+        !confirm(
+            `「${postTitle}」を削除しますか？\n\n投稿ID：${id}`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
+                {
+
+                    method: "POST",
+
+                    body: JSON.stringify({
+
+                        type:
+                            "deletePost",
+
+                        id:
+                            id
+
+                    })
+
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        console.log(
+            "投稿削除結果:",
+            result
+        );
+
+
+        if (
+            result.result ===
+            "success"
+        ) {
+
+            alert(
+                "投稿を削除しました！"
+            );
+
+            loadAdminPosts();
+
+        } else {
+
+            alert(
+                result.message ||
+                "投稿の削除に失敗しました。"
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "投稿削除エラー:",
+            error
+        );
+
+        alert(
+            "投稿の削除中にエラーが発生しました。"
+        );
+
+    }
+
+}
+
+
+// HTML onclick用
+window.adminDeletePost =
+    adminDeletePost;
+
+
+// ==========================
+// 編集画面から削除
+// ==========================
+
+function adminDeletePostFromEditor() {
+
+    if (!currentEditingPost) {
+
+        alert(
+            "投稿が選択されていません。"
+        );
+
+        return;
+
+    }
+
+
+    adminDeletePost(
+        currentEditingPost.id
+    );
+
+}
+
+// ==========================
+// 🔧 メンテナンス設定
+// ==========================
+
+const maintenanceEnabled =
+    document.getElementById("maintenanceEnabled");
+
+const maintenanceMessage =
+    document.getElementById("maintenanceMessage");
+
+const maintenanceEndTime =
+    document.getElementById("maintenanceEndTime");
+
+const maintenanceSaveBtn =
+    document.getElementById("maintenanceSaveBtn");
+
+const maintenanceStatus =
+    document.getElementById("maintenanceStatus");
+
+
+// ==========================
+// 🔧 現在の設定を読み込む
+// ==========================
+
+async function loadMaintenanceSettings() {
+
+    if (!maintenanceEnabled) return;
+
+    try {
+
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec?type=maintenance"
+        );
+
+        const data = await response.json();
+
+        console.log(
+            "🔧 メンテナンス設定:",
+            data
+        );
+
+        if (data.result !== "success") {
+            throw new Error(
+                data.message ||
+                "設定の取得に失敗しました"
+            );
+        }
+
+        maintenanceEnabled.checked =
+            data.maintenance === true ||
+            String(data.maintenance).toUpperCase() === "TRUE";
+
+        maintenanceMessage.value =
+            data.message ||
+            "現在StudyLinkはメンテナンス中です。";
+
+        if (data.endTime) {
+
+            const date =
+                new Date(data.endTime);
+
+            if (!isNaN(date.getTime())) {
+
+                const local =
+                    new Date(
+                        date.getTime() -
+                        date.getTimezoneOffset() * 60000
+                    )
+                    .toISOString()
+                    .slice(0, 16);
+
+                maintenanceEndTime.value =
+                    local;
+            }
+
+        } else {
+
+            maintenanceEndTime.value = "";
+
+        }
+
+        updateMaintenanceStatus();
+
+    } catch (error) {
+
+        console.error(
+            "メンテナンス設定読み込みエラー:",
+            error
+        );
+
+        if (maintenanceStatus) {
+
+            maintenanceStatus.textContent =
+                "⚠️ 設定の読み込みに失敗しました";
+
+        }
+
+    }
+
+}
+
+
+// ==========================
+// 💾 メンテナンス設定を保存
+// ==========================
+
+if (maintenanceSaveBtn) {
+
+    maintenanceSaveBtn.onclick = async function() {
+
+        const enabled =
+            maintenanceEnabled.checked;
+
+        const message =
+            maintenanceMessage.value.trim();
+
+        const endTime =
+            maintenanceEndTime.value;
+
+        if (!message) {
+
+            alert(
+                "メンテナンスメッセージを入力してください。"
+            );
+
+            return;
+        }
+
+        if (!confirm(
+            enabled
+                ? "メンテナンスモードをONにしますか？"
+                : "メンテナンスモードをOFFにしますか？"
+        )) {
+            return;
+        }
+
+        maintenanceSaveBtn.disabled = true;
+        maintenanceSaveBtn.textContent =
+            "保存中...";
+
+        try {
+
+            const response = await fetch(
+                "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
+                {
+                    method: "POST",
+
+                    body: JSON.stringify({
+
+                        type: "setMaintenance",
+
+                        maintenance: enabled,
+
+                        message: message,
+
+                        endTime: endTime
+                            ? new Date(endTime).toISOString()
+                            : ""
+
+                    })
+                }
+            );
+
+            const result =
+                await response.json();
+
+            console.log(
+                "🔧 メンテナンス保存結果:",
+                result
+            );
+
+            if (result.result === "success") {
+
+                alert(
+                    enabled
+                        ? "🔧 メンテナンスモードをONにしました！"
+                        : "✅ メンテナンスモードをOFFにしました！"
+                );
+
+                updateMaintenanceStatus();
+
+            } else {
+
+                alert(
+                    result.message ||
+                    "設定の保存に失敗しました。"
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "メンテナンス設定保存エラー:",
+                error
+            );
+
+            alert(
+                "通信エラーが発生しました。"
+            );
+
+        } finally {
+
+            maintenanceSaveBtn.disabled = false;
+
+            maintenanceSaveBtn.textContent =
+                "💾 メンテナンス設定を保存";
+
+        }
+
+    };
+
+}
+
+
+// ==========================
+// 📊 現在の状態表示
+// ==========================
+
+function updateMaintenanceStatus() {
+
+    if (!maintenanceStatus ||
+        !maintenanceEnabled) {
+        return;
+    }
+
+    if (maintenanceEnabled.checked) {
+
+        maintenanceStatus.textContent =
+            "🔴 現在：メンテナンス中";
+
+    } else {
+
+        maintenanceStatus.textContent =
+            "🟢 現在：通常運営";
+
+    }
+
+}
+
+
+// ==========================
+// ⚙️ 設定ページを開いたら読み込む
+// ==========================
+
+const maintenanceOriginalShowPage =
+    window.showPage;
+
+window.showPage = function(pageName, button) {
+
+    maintenanceOriginalShowPage(
+        pageName,
+        button
+    );
+
+    if (pageName === "settings") {
+
+        loadMaintenanceSettings();
+
+    }
+
+};
+
+
+// HTML onclick用
+window.adminDeletePostFromEditor =
+    adminDeletePostFromEditor;
+
+
+// ==========================
+// 投稿管理ページを開いたとき
+// ==========================
+
+const originalShowPage =
+    window.showPage;
+
+window.showPage =
+    function(pageName, button) {
+
+        originalShowPage(
+            pageName,
+            button
+        );
+
+        if (pageName === "post") {
+
+            loadAdminPosts();
+
+        }
+
+    };
 
 // HTMLのonclickから呼べるようにする
 window.showAdminUserDetail =
@@ -2004,3 +3276,4 @@ window.closeAdminUserDetail =
 
 loadNotices();
 loadAdminUsers();
+loadAdminPosts();

@@ -283,3 +283,240 @@ textarea{
 .back-user-btn:hover {
     background: #d9e4fb;
 }
+
+/* =========================
+   🔧 メンテナンス設定
+========================= */
+
+#settingsPage .card{
+    padding:30px;
+}
+
+/* 説明文 */
+#settingsPage .card > p{
+    color:#666;
+    margin-top:8px;
+    font-size:15px;
+}
+
+/* 区切り線 */
+#settingsPage hr{
+    border:none;
+    border-top:1px solid #e5e7eb;
+    margin:25px 0;
+}
+
+/* ===== メンテナンスON/OFF ===== */
+
+.maintenance-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    background:#f8fafc;
+    border:1px solid #e5e7eb;
+
+    border-radius:16px;
+
+    padding:18px 20px;
+
+    margin-top:15px;
+}
+
+/* ラベル部分 */
+.maintenance-toggle-label{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.maintenance-toggle-label strong{
+    font-size:17px;
+}
+
+.maintenance-toggle-label span{
+    color:#777;
+    font-size:13px;
+}
+
+/* チェックボックス */
+#maintenanceEnabled{
+    appearance:none;
+
+    width:54px;
+    height:30px;
+
+    margin:0;
+
+    background:#d1d5db;
+
+    border-radius:30px;
+
+    position:relative;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    flex-shrink:0;
+}
+
+/* 丸 */
+#maintenanceEnabled::before{
+    content:"";
+
+    position:absolute;
+
+    width:24px;
+    height:24px;
+
+    top:3px;
+    left:3px;
+
+    background:white;
+
+    border-radius:50%;
+
+    box-shadow:0 2px 5px rgba(0,0,0,.2);
+
+    transition:.25s;
+}
+
+/* ON */
+#maintenanceEnabled:checked{
+    background:#2563eb;
+}
+
+#maintenanceEnabled:checked::before{
+    transform:translateX(24px);
+}
+
+/* ===== ラベル ===== */
+
+#settingsPage label[for="maintenanceMessage"],
+#settingsPage label[for="maintenanceEndTime"]{
+    display:block;
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+    font-size:15px;
+}
+
+/* ===== 入力欄 ===== */
+
+#settingsPage textarea{
+    margin-top:10px;
+
+    min-height:130px;
+
+    background:#fff;
+
+    border:1px solid #dfe3ea;
+
+    transition:.2s;
+}
+
+#settingsPage textarea:focus,
+#settingsPage input[type="datetime-local"]:focus{
+    outline:none;
+
+    border-color:#2563eb;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.12);
+}
+
+/* 日時入力 */
+#settingsPage input[type="datetime-local"]{
+    margin-top:10px;
+
+    height:52px;
+
+    background:#fff;
+}
+
+/* ===== 保存ボタン ===== */
+
+#maintenanceSaveBtn{
+    margin-top:25px;
+
+    padding:15px 25px;
+
+    border-radius:12px;
+
+    font-weight:bold;
+
+    transition:.2s;
+}
+
+#maintenanceSaveBtn:hover{
+    transform:translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(37,99,235,.2);
+}
+
+/* ===== 現在の状態 ===== */
+
+#maintenanceStatus{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:25px !important;
+
+    padding:18px 20px;
+
+    border-radius:16px;
+
+    background:#ecfdf5;
+
+    color:#047857;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    border:1px solid #a7f3d0;
+
+}
+
+/* ===== メンテナンスON時 ===== */
+
+#settingsPage:has(
+    #maintenanceEnabled:checked
+) #maintenanceStatus{
+
+    background:#fef2f2;
+
+    color:#dc2626;
+
+    border-color:#fecaca;
+
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media(max-width:600px){
+
+    #settingsPage .card{
+        padding:20px;
+    }
+
+    .maintenance-toggle{
+        padding:15px;
+    }
+
+    #maintenanceSaveBtn{
+        width:100%;
+    }
+
+}

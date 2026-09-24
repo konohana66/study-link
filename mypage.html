@@ -1,115 +1,1110 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>マイページ</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>マイページ | StudyLink</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* =========================
+           StudyLink マイページ
+        ========================= */
+
+        .sl-mypage {
+            min-height: 100vh;
+            padding: 30px 16px 50px;
+            background:
+                radial-gradient(
+                    circle at 10% 0%,
+                    rgba(80, 130, 255, 0.10),
+                    transparent 28%
+                ),
+                radial-gradient(
+                    circle at 100% 10%,
+                    rgba(150, 100, 255, 0.10),
+                    transparent 28%
+                ),
+                #f5f7fb;
+            color: #172033;
+        }
+
+        .sl-mypage-container {
+            width: min(960px, 100%);
+            margin: 0 auto;
+        }
+
+        /* =========================
+           ヘッダー
+        ========================= */
+
+        .sl-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .sl-header-small {
+            margin: 0 0 5px;
+            color: #7b8498;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+        }
+
+        .sl-header h1 {
+            margin: 0;
+            font-size: 34px;
+        }
+
+        .sl-header-sub {
+            margin: 7px 0 0;
+            color: #7a8497;
+            font-size: 14px;
+        }
+
+        .sl-home-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 13px;
+            background: #ffffff;
+            color: #2d60e9;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 800;
+            box-shadow: 0 8px 22px rgba(40, 60, 110, 0.08);
+        }
+
+        /* =========================
+           プロフィール
+        ========================= */
+
+        .sl-profile-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 235px;
+            padding: 30px;
+            border-radius: 26px;
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef5ff,
+                    #f3edff
+                );
+            border: 1px solid rgba(80, 100, 160, 0.08);
+            box-shadow: 0 20px 45px rgba(38, 54, 95, 0.10);
+        }
+
+        .sl-profile-card::after {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            right: -120px;
+            top: -150px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        .sl-profile-inner {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+
+        .sl-profile-icon {
+            width: 108px;
+            height: 108px;
+            flex: 0 0 108px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #ffffff;
+            font-size: 48px;
+            box-shadow: 0 12px 28px rgba(30, 45, 85, 0.14);
+        }
+
+        .sl-profile-label {
+            margin-bottom: 6px;
+            color: #7b8498;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.17em;
+        }
+
+        .sl-profile-name {
+            margin: 0;
+            font-size: 34px;
+            line-height: 1.25;
+            overflow-wrap: anywhere;
+        }
+
+        .sl-profile-title {
+            display: inline-flex;
+            margin-top: 11px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.86);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .sl-profile-edit {
+            position: relative;
+            z-index: 1;
+            margin-top: 24px;
+        }
+
+        #editArea {
+    background: #ffffff !important;
+    color: #172033;
+}
+
+#editArea {
+    background: #ffffff !important;
+    color: #172033;
+    border-radius: 20px;
+    padding: 25px;
+    margin-top: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+#profileIcon {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+}
+
+#profileIcon img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+#profileIconDefault {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+        /* =========================
+           共通セクション
+        ========================= */
+
+        .sl-section {
+            margin-top: 18px;
+            padding: 24px;
+            border-radius: 23px;
+            background: #ffffff;
+            border: 1px solid rgba(65, 84, 130, 0.08);
+            box-shadow: 0 16px 38px rgba(38, 52, 91, 0.07);
+        }
+
+        .sl-section-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .sl-section-head-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sl-section-number {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            background: #eef3ff;
+            color: #5573ea;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .sl-section-head h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .sl-section-caption {
+            color: #a1a8b7;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.13em;
+        }
+
+        /* =========================
+           ステータス
+        ========================= */
+
+        .sl-status-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.5fr 0.8fr;
+            gap: 14px;
+        }
+
+        .sl-status-box {
+            padding: 18px;
+            border-radius: 18px;
+            background: #f7f9fd;
+        }
+
+        .sl-status-icon {
+            font-size: 22px;
+        }
+
+        .sl-status-label {
+            display: block;
+            margin-top: 6px;
+            color: #8992a5;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+        }
+
+        .sl-status-value {
+            display: block;
+            margin-top: 5px;
+            font-size: 23px;
+            font-weight: 800;
+        }
+
+        #xpText {
+            font-size: 15px;
+        }
+
+        #xpBar {
+            width: 100%;
+            height: 9px;
+            margin-top: 11px;
+            appearance: none;
+            border: 0;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        #xpBar::-webkit-progress-bar {
+            background: #e6ebf3;
+            border-radius: 999px;
+        }
+
+        #xpBar::-webkit-progress-value {
+            background: #5c7cff;
+            border-radius: 999px;
+        }
+
+        #xpBar::-moz-progress-bar {
+            background: #5c7cff;
+            border-radius: 999px;
+        }
+
+        /* =========================
+           装備
+        ========================= */
+
+        .sl-equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .sl-equipment-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 84px;
+            padding: 15px;
+            border-radius: 18px;
+            background: #f7f9fd;
+        }
+
+        .sl-equipment-icon {
+            width: 46px;
+            height: 46px;
+            flex: 0 0 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: #ffffff;
+            font-size: 22px;
+            box-shadow: 0 6px 14px rgba(30, 45, 85, 0.06);
+        }
+
+        .sl-equipment-label {
+            display: block;
+            color: #8b94a7;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .sl-equipment-value {
+            display: block;
+            margin-top: 4px;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        /* =========================
+           ボタン
+        ========================= */
+
+        .sl-primary-button,
+        .sl-secondary-button,
+        .sl-admin-button,
+        .sl-logout-button {
+            min-height: 46px;
+            border: 0;
+            border-radius: 14px;
+            padding: 0 18px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .sl-primary-button {
+            background: #2f63ff;
+            color: #ffffff;
+        }
+
+        .sl-secondary-button {
+            background: #eef1f6;
+            color: #4f586c;
+        }
+
+        /* =========================
+           編集
+        ========================= */
+
+        .sl-edit-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .sl-form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .sl-form-field span {
+            color: #687287;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .sl-form-field input,
+        .sl-form-field select {
+            width: 100%;
+            min-height: 46px;
+            padding: 0 13px;
+            border: 1px solid #dce3ee;
+            border-radius: 13px;
+            background: #ffffff;
+            color: #172033;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .sl-edit-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .sl-edit-panel {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.sl-edit-title h3 {
+    margin: 0 0 16px;
+    font-size: 18px;
+}
+
+        /* =========================
+           管理者
+        ========================= */
+
+        .sl-admin-card {
+            background: linear-gradient(
+                135deg,
+                #ffffff,
+                #f5f7ff
+            );
+        }
+
+        .sl-admin-text {
+            margin: 0 0 15px;
+            color: #6d7689;
+            font-size: 14px;
+        }
+
+        .sl-admin-button {
+            background: #222c45;
+            color: #ffffff;
+        }
+
+        /* =========================
+           ログアウト
+        ========================= */
+
+        .sl-logout-button {
+            width: 100%;
+            background: #f1f3f7;
+            color: #566075;
+        }
+
+        /* =========================
+           フッター
+        ========================= */
+
+        .sl-footer {
+            padding-top: 24px;
+            text-align: center;
+        }
+
+        .sl-footer a {
+            color: #6c7588;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        /* =========================
+           スマホ
+        ========================= */
+
+        @media (max-width: 720px) {
+
+            .sl-mypage {
+                padding: 20px 10px 35px;
+            }
+
+            .sl-header {
+                align-items: flex-start;
+            }
+
+            .sl-header h1 {
+                font-size: 28px;
+            }
+
+            .sl-profile-card,
+            .sl-section {
+                border-radius: 19px;
+            }
+
+            .sl-profile-card,
+            .sl-section {
+                padding: 18px;
+            }
+
+            .sl-profile-inner {
+                gap: 14px;
+            }
+
+            .sl-profile-icon {
+                width: 82px;
+                height: 82px;
+                flex-basis: 82px;
+                font-size: 38px;
+            }
+
+            .sl-profile-name {
+                font-size: 24px;
+            }
+
+            .sl-status-grid,
+            .sl-equipment-grid,
+            .sl-edit-form {
+                grid-template-columns: 1fr;
+            }
+
+            .sl-section-caption {
+                display: none;
+            }
+
+            .sl-edit-actions {
+                flex-direction: column;
+            }
+
+            .sl-primary-button,
+            .sl-secondary-button,
+            .sl-admin-button {
+                width: 100%;
+            }
+
+            .sl-home-button {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
+    <main class="sl-mypage">
 
-  <div class="card">
+        <div class="sl-mypage-container">
 
-    <h1>マイページ</h1>
+            <!-- =========================
+                 ヘッダー
+            ========================= -->
 
-    <div id="profileArea">
+            <header class="sl-header">
 
-    <div id="profileIcon">
-        👤
+                <div>
+                    <p class="sl-header-small">
+                        STUDYLINK
+                    </p>
+
+                    <h1>
+                        マイページ
+                    </h1>
+
+                    <p class="sl-header-sub">
+                        あなたのStudyLinkプロフィール
+                    </p>
+                </div>
+
+                <a
+                    href="index.html"
+                    class="sl-home-button"
+                >
+                    ← ホーム
+                </a>
+
+            </header>
+
+
+            <!-- =========================
+                 プロフィール
+            ========================= -->
+
+            <section
+                id="profileArea"
+                class="sl-profile-card"
+            >
+
+                <div class="sl-profile-inner">
+
+                    <div
+    id="profileIcon"
+    class="sl-profile-icon"
+>
+    👤
+</div>
+
+<input
+    type="file"
+    id="profileImageInput"
+    accept="image/*"
+    style="display:none;"
+>
+
+                    <div>
+
+                        <div class="sl-profile-label">
+                            PROFILE
+                        </div>
+
+                        <h2
+                            id="userName"
+                            class="sl-profile-name"
+                        >
+                            読み込み中...
+                        </h2>
+
+                        <div
+                            id="profileTitle"
+                            class="sl-profile-title"
+                        >
+                            ブロンズ
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="sl-profile-edit">
+
+    <button
+        type="button"
+        id="editProfile"
+        class="sl-primary-button"
+    >
+        プロフィールを編集
+    </button>
+
+</div>
+
+
+<!-- プロフィール編集 -->
+
+<div
+    id="editArea"
+    class="sl-edit-panel"
+    style="display:none;"
+>
+
+    <div class="sl-edit-title">
+        <h3>プロフィール編集</h3>
     </div>
 
-    <div id="profileTitle"></div>
+
+    <div class="sl-edit-form">
+
+        <label class="sl-form-field">
+
+            <span>名前</span>
+
+            <input
+                type="text"
+                id="editName"
+                maxlength="30"
+            >
+
+        </label>
+
+
+        <label class="sl-form-field">
+
+            <span>称号</span>
+
+            <select id="editTitle">
+
+                <option value="default">
+                    ブロンズ
+                </option>
+
+            </select>
+
+        </label>
+
+
+        <label class="sl-form-field">
+
+            <span>背景</span>
+
+            <select id="editBackground">
+
+                <option value="default">
+                    スタンダード
+                </option>
+
+            </select>
+
+        </label>
+
+
+        <label class="sl-form-field">
+
+            <span>フレーム</span>
+
+            <select id="editFrame">
+
+                <option value="default">
+                    スタンダード
+                </option>
+
+            </select>
+
+        </label>
+
+        <div class="sl-form-field">
+
+    <span>プロフィール画像</span>
+
+    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+        <button
+            type="button"
+            id="changeProfileImage"
+            class="sl-primary-button"
+        >
+            写真を変更
+        </button>
+
+        <button
+            type="button"
+            id="deleteProfileImage"
+            class="sl-secondary-button"
+        >
+            写真を削除
+        </button>
+
+    </div>
 
 </div>
 
-<h2 id="userName"></h2>
+    </div>
 
-<hr>
 
-<h2>レベル</h2>
+    <div class="sl-edit-actions">
 
-<h1 id="level">Lv.1</h1>
+        <button
+            type="button"
+            id="saveProfile"
+            class="sl-primary-button"
+        >
+            保存する
+        </button>
 
-<progress id="xpBar" value="0" max="100"></progress>
+        <button
+            type="button"
+            id="cancelEdit"
+            class="sl-secondary-button"
+        >
+            キャンセル
+        </button>
 
-<p id="xpText">0 / 100 XP</p>
-
-<hr>
-
-<h2>Coin</h2>
-
-<h1 id="coin">0 Coin</h1>
-
-<hr>
-
-<h2>称号</h2>
-
-<h1 id="rank">Bronze</h1>
-
-<hr>
-
-<button id="editProfile">編集</button>
-
-<div id="editArea" style="display:none;">
-
-    <h2>プロフィール編集</h2>
-
-    <label>
-        名前
-        <input type="text" id="editName">
-    </label>
-
-    <br><br>
-
-<label>
-    🏷️ 称号
-    <select id="editTitle">
-        <option value="default">Bronze</option>
-    </select>
-</label>
-
-<br><br>
-
-<label>
-    🎨 プロフィール背景
-    <select id="editBackground">
-        <option value="default">通常</option>
-    </select>
-</label>
-
-<br><br>
-
-<label>
-    🖼️ アイコンフレーム
-    <select id="editFrame">
-        <option value="default">通常</option>
-    </select>
-</label>
-
-    <br><br>
-
-    <button id="saveProfile">保存</button>
-
-    <button id="cancelEdit">キャンセル</button>
+    </div>
 
 </div>
 
-<br><br>
+            </section>
 
-<button id="logout">ログアウト</button>
 
-<br><br>
+            <!-- =========================
+                 ステータス
+            ========================= -->
 
-<a href="index.html" class="back-button">
-    ホームへ戻る
-</a>
+            <section class="sl-section">
 
-</div>
+                <div class="sl-section-head">
 
-<script src="js/mypage.js"></script>
-<script src="js/freeze-check.js?v=1"></script>
+                    <div class="sl-section-head-left">
+
+                        <span class="sl-section-number">
+                            01
+                        </span>
+
+                        <h2>
+                            📊 ステータス
+                        </h2>
+
+                    </div>
+
+                    <span class="sl-section-caption">
+                        YOUR STATUS
+                    </span>
+
+                </div>
+
+
+                <div class="sl-status-grid">
+
+                    <div class="sl-status-box">
+
+                        <span class="sl-status-icon">
+                            ⭐
+                        </span>
+
+                        <span class="sl-status-label">
+                            LEVEL
+                        </span>
+
+                        <strong
+                            id="level"
+                            class="sl-status-value"
+                        >
+                            Lv.1
+                        </strong>
+
+                    </div>
+
+
+                    <div class="sl-status-box">
+
+                        <span class="sl-status-icon">
+                            ✨
+                        </span>
+
+                        <span class="sl-status-label">
+                            XP
+                        </span>
+
+                        <strong
+                            id="xpText"
+                            class="sl-status-value"
+                        >
+                            0 / 100 XP
+                        </strong>
+
+                        <progress
+                            id="xpBar"
+                            value="0"
+                            max="100"
+                        ></progress>
+
+                    </div>
+
+
+                    <div class="sl-status-box">
+
+                        <span class="sl-status-icon">
+                            💰
+                        </span>
+
+                        <span class="sl-status-label">
+                            COIN
+                        </span>
+
+                        <strong
+                            id="coin"
+                            class="sl-status-value"
+                        >
+                            0 Coin
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 現在のプロフィール
+            ========================= -->
+
+            <section class="sl-section">
+
+                <div class="sl-section-head">
+
+                    <div class="sl-section-head-left">
+
+                        <span class="sl-section-number">
+                            02
+                        </span>
+
+                        <h2>
+                            🎨 プロフィール
+                        </h2>
+
+                    </div>
+
+                    <span class="sl-section-caption">
+                        EQUIPPED
+                    </span>
+
+                </div>
+
+
+                <div class="sl-equipment-grid">
+
+                    <div class="sl-equipment-box">
+
+                        <div class="sl-equipment-icon">
+                            🏷️
+                        </div>
+
+                        <div>
+
+                            <span class="sl-equipment-label">
+                                称号
+                            </span>
+
+                            <strong
+                                id="equippedTitle"
+                                class="sl-equipment-value"
+                            >
+                                ブロンズ
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sl-equipment-box">
+
+                        <div class="sl-equipment-icon">
+                            🎨
+                        </div>
+
+                        <div>
+
+                            <span class="sl-equipment-label">
+                                背景
+                            </span>
+
+                            <strong
+                                id="equippedBackground"
+                                class="sl-equipment-value"
+                            >
+                                スタンダード
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="sl-equipment-box">
+
+                        <div class="sl-equipment-icon">
+                            🖼️
+                        </div>
+
+                        <div>
+
+                            <span class="sl-equipment-label">
+                                フレーム
+                            </span>
+
+                            <strong
+                                id="equippedFrame"
+                                class="sl-equipment-value"
+                            >
+                                スタンダード
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 管理者
+            ========================= -->
+
+            <section
+                id="adminArea"
+                class="sl-section sl-admin-card"
+                style="display:none;"
+            >
+
+                <div class="sl-section-head">
+
+                    <div class="sl-section-head-left">
+
+                        <span class="sl-section-number">
+                            04
+                        </span>
+
+                        <h2>
+                            🛠️ 管理者
+                        </h2>
+
+                    </div>
+
+                    <span class="sl-section-caption">
+                        ADMIN
+                    </span>
+
+                </div>
+
+
+                <p class="sl-admin-text">
+                    管理者用の機能を利用できます。
+                </p>
+
+
+                <button
+                    type="button"
+                    id="adminPageButton"
+                    class="sl-admin-button"
+                >
+                    管理者画面を開く
+                </button>
+
+            </section>
+
+
+            <!-- =========================
+                 その他
+            ========================= -->
+
+            <section class="sl-section">
+
+                <div class="sl-section-head">
+
+                    <div class="sl-section-head-left">
+
+                        <span class="sl-section-number">
+                            05
+                        </span>
+
+                        <h2>
+                            ⚙️ その他
+                        </h2>
+
+                    </div>
+
+                    <span class="sl-section-caption">
+                        OTHER
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="logout"
+                    class="sl-logout-button"
+                >
+                    ログアウト
+                </button>
+
+            </section>
+
+
+            <!-- =========================
+                 フッター
+            ========================= -->
+
+            <footer class="sl-footer">
+
+                <a href="index.html">
+                    StudyLink ホームへ戻る
+                </a>
+
+            </footer>
+
+        </div>
+
+    </main>
+
+
+    <!-- 凍結・メンテナンス監視 -->
+
+    <script src="js/mypage.js?v=3"></script>
+
+    <script src="js/user-session.js?v=1"></script>
+
+    <script src="js/freeze-check.js?v=1"></script>
+
+    <script src="js/maintenance-check.js?v=1"></script>
 
 </body>
 </html>

@@ -17,7 +17,7 @@ let earnedXP = 0;
 
 let questionCount = 0;
 let quiz = [];
-
+let weaknessMode = false;
 let studyStartTime = null;
 
 
@@ -58,8 +58,18 @@ const xpResultElement =
 // ====================
 
 function startQuiz(count) {
+    weaknessMode =
+        new URLSearchParams(location.search)
+            .get("mode") === "weakness";
 
-    questionCount = count;
+    const urlCount =
+        new URLSearchParams(location.search)
+            .get("count");
+
+    questionCount =
+        weaknessMode && urlCount
+            ? Number(urlCount)
+            : count;
 
     currentQuestion = 0;
     score = 0;
@@ -211,6 +221,58 @@ const questionTemplates = [
 
 function createQuiz(count) {
 
+    if (weaknessMode) {
+
+        const weaknesses =
+            JSON.parse(
+                localStorage.getItem(
+                    "studyLinkWeaknesses"
+                ) || "{}"
+            );
+
+        const unitData =
+            weaknesses?.["英語"]?.["be動詞"];
+
+        const weakQuestions =
+            unitData?.questions
+                ? Object.values(
+                    unitData.questions
+                ).filter(
+                    q => q.level > 0
+                )
+                : [];
+
+        if (weakQuestions.length > 0) {
+
+            weakQuestions.sort(
+                (a, b) =>
+                    b.level - a.level
+            );
+
+            const selected = [];
+
+            while (
+                selected.length < count
+            ) {
+                selected.push(
+                    weakQuestions[
+                        selected.length %
+                        weakQuestions.length
+                    ]
+                );
+            }
+
+            return selected.map(q => ({
+                id: q.id,
+                subject: "英語",
+                unit: "be動詞",
+                question: q.question,
+                choices: q.choices,
+                answer: q.answer
+            }));
+        }
+    }
+
     const quiz = [];
 
     const shuffled =
@@ -235,6 +297,10 @@ function createQuiz(count) {
             );
 
         quiz.push({
+            id:
+                `english-be-${i}`,
+            subject: "英語",
+            unit: "be動詞",
 
             question:
                 template.question,
@@ -246,9 +312,7 @@ function createQuiz(count) {
                 choices.indexOf(
                     template.answer
                 )
-
         });
-
     }
 
     return quiz;
@@ -327,6 +391,150 @@ function showQuestion() {
 
 }
 
+async function saveQuestionResult(
+    correct,
+    answer
+) {
+
+    const userId =
+        localStorage.getItem("userId");
+
+    const q =
+        quiz[currentQuestion];
+
+    if (!userId || !q) {
+        return;
+    }
+
+    try {
+
+        await fetch(
+            GAS_URL,
+            {
+                method: "POST",
+
+                body: JSON.stringify({
+
+                    type:
+                        "saveQuestionResult",
+
+                    userId:
+                        userId,
+
+                    questionId:
+                        q.id,
+
+                    subject:
+                        q.subject,
+
+                    unit:
+                        q.unit,
+
+                    correct:
+                        correct,
+
+                    answer:
+                        answer,
+
+                    source:
+                        weaknessMode
+                            ? "weakness"
+                            : "normal"
+                })
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "問題回答履歴の保存エラー:",
+            error
+        );
+    }
+}
+
+function updateWeakness(correct) {
+
+    const q =
+        quiz[currentQuestion];
+
+    if (!q) {
+        return;
+    }
+
+    let weaknesses =
+        JSON.parse(
+            localStorage.getItem(
+                "studyLinkWeaknesses"
+            ) || "{}"
+        );
+
+    if (!weaknesses["英語"]) {
+        weaknesses["英語"] = {};
+    }
+
+    if (!weaknesses["英語"]["be動詞"]) {
+        weaknesses["英語"]["be動詞"] = {
+            wrong: 0,
+            correct: 0,
+            level: 0,
+            questions: {}
+        };
+    }
+
+    const data =
+        weaknesses["英語"]["be動詞"];
+
+    if (!data.questions) {
+        data.questions = {};
+    }
+
+    if (!data.questions[q.id]) {
+        data.questions[q.id] = {
+            wrong: 0,
+            correct: 0,
+            level: 0,
+            question: q.question,
+            choices: q.choices,
+            answer: q.answer
+        };
+    }
+
+    const questionData =
+        data.questions[q.id];
+
+    if (correct) {
+
+        data.correct++;
+
+        data.level =
+            Math.max(
+                0,
+                data.level - 1
+            );
+
+        questionData.correct++;
+
+        questionData.level =
+            Math.max(
+                0,
+                questionData.level - 1
+            );
+
+    } else {
+
+        data.wrong++;
+        data.level++;
+
+        questionData.wrong++;
+        questionData.level++;
+    }
+
+    localStorage.setItem(
+        "studyLinkWeaknesses",
+        JSON.stringify(weaknesses)
+    );
+}
 
 // ====================
 // 答え合わせ
@@ -365,9 +573,14 @@ function checkAnswer(
 
     if (correct) {
 
-        score++;
+    updateWeakness(true);
 
-        earnedXP += 5;
+    saveQuestionResult(
+        true,
+        clickedButton.textContent
+    );
+
+    score++;
 
         resultElement.textContent =
             "⭕ 正解！ +5 XP";
@@ -377,7 +590,14 @@ function checkAnswer(
 
     } else {
 
-        clickedButton.style.background =
+    updateWeakness(false);
+
+    saveQuestionResult(
+        false,
+        clickedButton.textContent
+    );
+
+    clickedButton.style.background =
             "#f44336";
 
         clickedButton.style.color =
@@ -575,4 +795,22 @@ async function finishQuiz() {
 
     }
 
+}
+
+// ====================
+// 弱点モード自動開始
+// ====================
+
+const urlParams =
+    new URLSearchParams(location.search);
+
+const isWeaknessMode =
+    urlParams.get("mode") === "weakness";
+
+if (isWeaknessMode) {
+
+    const count =
+        Number(urlParams.get("count")) || 10;
+
+    startQuiz(count);
 }

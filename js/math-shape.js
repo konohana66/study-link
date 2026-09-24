@@ -18,6 +18,8 @@ let earnedXP = 0;
 let questionCount = 0;
 let quiz = [];
 
+let weaknessMode = false;
+
 let studyStartTime = null;
 
 
@@ -59,23 +61,60 @@ const xpResultElement =
 
 function startQuiz(count) {
 
-    questionCount = count;
+    const urlParams =
+        new URLSearchParams(
+            location.search
+        );
+
+    weaknessMode =
+        urlParams.get("mode") ===
+        "weakness";
+
+
+    questionCount =
+        count;
 
     currentQuestion = 0;
     score = 0;
     earnedXP = 0;
 
     quiz =
-        createQuiz(questionCount);
+        createQuiz(
+            questionCount
+        );
 
     studyStartTime =
         Date.now();
+
 
     countArea.style.display =
         "none";
 
     quizArea.style.display =
         "block";
+
+
+    if (quiz.length === 0) {
+
+        if (weaknessMode) {
+
+            alert(
+                "この単元には現在、弱点問題がありません。"
+            );
+
+            location.href =
+                "weakness.html";
+
+            return;
+
+        }
+
+        finishQuiz();
+
+        return;
+
+    }
+
 
     showQuestion();
 }
@@ -88,27 +127,149 @@ function startQuiz(count) {
 function randomInt(min, max) {
 
     return Math.floor(
-        Math.random() * (max - min + 1)
+        Math.random() *
+            (max - min + 1)
     ) + min;
 
 }
 
 
 // ====================
-// 図形問題作成
+// クイズ作成
 // ====================
 
 function createQuiz(count) {
 
+    // ====================
+    // 弱点モード
+    // ====================
+
+    if (weaknessMode) {
+
+        const weaknesses =
+            JSON.parse(
+                localStorage.getItem(
+                    "studyLinkWeaknesses"
+                ) || "{}"
+            );
+
+
+        const data =
+            weaknesses?.["数学"]?.["図形"];
+
+
+        if (
+            !data ||
+            !data.questions
+        ) {
+
+            return [];
+
+        }
+
+
+        const weakQuestions =
+            Object.entries(
+                data.questions
+            )
+                .filter(
+                    ([id, q]) =>
+                        q.level > 0
+                )
+                .sort(
+                    ([idA, a], [idB, b]) =>
+                        b.level - a.level
+                );
+
+
+        if (
+            weakQuestions.length === 0
+        ) {
+
+            return [];
+
+        }
+
+
+        const result = [];
+
+
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
+
+            const [
+                id,
+                q
+            ] =
+                weakQuestions[
+                    i %
+                    weakQuestions.length
+                ];
+
+
+            result.push({
+
+                id: id,
+
+                subject:
+                    "数学",
+
+                unit:
+                    "図形",
+
+                question:
+                    q.question,
+
+                choices:
+                    q.choices.map(
+                        String
+                    ),
+
+                answer:
+                    q.answer
+
+            });
+
+        }
+
+
+        return result;
+
+    }
+
+
+    // ====================
+    // 通常モード
+    // ====================
+
+    return createNormalQuiz(
+        count
+    );
+}
+
+
+// ====================
+// 通常問題作成
+// ====================
+
+function createNormalQuiz(count) {
+
     const quiz = [];
 
-    const used = new Set();
+    const used =
+        new Set();
 
 
-    while (quiz.length < count) {
+    while (
+        quiz.length < count
+    ) {
 
         const type =
             randomInt(1, 6);
+
 
         let question;
         let answer;
@@ -121,10 +282,15 @@ function createQuiz(count) {
         if (type === 1) {
 
             const angle =
-                randomInt(20, 160);
+                randomInt(
+                    20,
+                    160
+                );
+
 
             question =
                 `2本の直線が交わっています。ある角が${angle}°のとき、その対頂角は何°？`;
+
 
             answer =
                 angle;
@@ -139,10 +305,15 @@ function createQuiz(count) {
         else if (type === 2) {
 
             const angle =
-                randomInt(20, 160);
+                randomInt(
+                    20,
+                    160
+                );
+
 
             question =
                 `一直線上にある2つの角のうち、1つが${angle}°です。もう1つの角は何°？`;
+
 
             answer =
                 180 - angle;
@@ -157,22 +328,33 @@ function createQuiz(count) {
         else if (type === 3) {
 
             const a =
-                randomInt(20, 100);
+                randomInt(
+                    20,
+                    100
+                );
+
 
             const b =
-                randomInt(20, 100);
+                randomInt(
+                    20,
+                    100
+                );
+
 
             const c =
                 180 - a - b;
 
 
             if (c <= 0) {
+
                 continue;
+
             }
 
 
             question =
                 `三角形の2つの角が${a}°と${b}°です。残りの角は何°？`;
+
 
             answer =
                 c;
@@ -187,25 +369,46 @@ function createQuiz(count) {
         else if (type === 4) {
 
             const a =
-                randomInt(60, 120);
+                randomInt(
+                    60,
+                    120
+                );
+
 
             const b =
-                randomInt(60, 120);
+                randomInt(
+                    60,
+                    120
+                );
+
 
             const c =
-                randomInt(60, 120);
+                randomInt(
+                    60,
+                    120
+                );
+
 
             const d =
-                360 - a - b - c;
+                360 -
+                a -
+                b -
+                c;
 
 
-            if (d <= 0 || d >= 180) {
+            if (
+                d <= 0 ||
+                d >= 180
+            ) {
+
                 continue;
+
             }
 
 
             question =
                 `四角形の3つの角が${a}°、${b}°、${c}°です。残りの角は何°？`;
+
 
             answer =
                 d;
@@ -220,7 +423,8 @@ function createQuiz(count) {
         else if (type === 5) {
 
             question =
-                `正三角形の1つの内角は何°？`;
+                "正三角形の1つの内角は何°？";
+
 
             answer =
                 60;
@@ -235,20 +439,29 @@ function createQuiz(count) {
         else {
 
             const baseAngle =
-                randomInt(20, 80);
+                randomInt(
+                    20,
+                    80
+                );
+
 
             const topAngle =
                 180 -
                 baseAngle * 2;
 
 
-            if (topAngle <= 0) {
+            if (
+                topAngle <= 0
+            ) {
+
                 continue;
+
             }
 
 
             question =
                 `二等辺三角形の底角が${baseAngle}°です。頂角は何°？`;
+
 
             answer =
                 topAngle;
@@ -264,9 +477,14 @@ function createQuiz(count) {
             `${question}|${answer}`;
 
 
-        if (used.has(key)) {
+        if (
+            used.has(key)
+        ) {
+
             continue;
+
         }
+
 
         used.add(key);
 
@@ -280,22 +498,31 @@ function createQuiz(count) {
         ];
 
 
-        while (choices.length < 4) {
+        while (
+            choices.length < 4
+        ) {
 
             let wrong =
                 answer +
-                randomInt(-20, 20);
+                randomInt(
+                    -20,
+                    20
+                );
 
 
             wrong =
-                Math.round(wrong);
+                Math.round(
+                    wrong
+                );
 
 
             if (
                 wrong <= 0 ||
                 wrong === answer
             ) {
+
                 continue;
+
             }
 
 
@@ -314,6 +541,10 @@ function createQuiz(count) {
         }
 
 
+        // ====================
+        // シャッフル
+        // ====================
+
         choices.sort(
             () =>
                 Math.random() - 0.5
@@ -321,6 +552,15 @@ function createQuiz(count) {
 
 
         quiz.push({
+
+            id:
+                `math-shape-${quiz.length + 1}`,
+
+            subject:
+                "数学",
+
+            unit:
+                "図形",
 
             question:
                 question,
@@ -339,7 +579,6 @@ function createQuiz(count) {
 
 
     return quiz;
-
 }
 
 
@@ -351,6 +590,15 @@ function showQuestion() {
 
     const q =
         quiz[currentQuestion];
+
+
+    if (!q) {
+
+        finishQuiz();
+
+        return;
+
+    }
 
 
     progress.textContent =
@@ -371,56 +619,319 @@ function showQuestion() {
 
     const choices =
         q.choices
-            .map((choice, index) => ({
+            .map(
+                (choice, index) => ({
 
-                choice,
+                    choice,
 
-                correct:
-                    index === q.answer
+                    correct:
+                        index ===
+                        q.answer
 
-            }))
+                })
+            )
             .sort(
                 () =>
                     Math.random() - 0.5
             );
 
 
-    choices.forEach(item => {
+    choices.forEach(
+        item => {
 
-        const button =
-            document.createElement("button");
-
-
-        button.className =
-            "answer-btn";
-
-
-        button.textContent =
-            item.choice + "°";
+            const button =
+                document.createElement(
+                    "button"
+                );
 
 
-        button.dataset.correct =
-            item.correct;
+            button.className =
+                "answer-btn";
 
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.textContent =
+                item.choice + "°";
 
-                checkAnswer(
-                    item.correct,
-                    button
+
+            button.dataset.correct =
+                item.correct;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    checkAnswer(
+                        item.correct,
+                        button
+                    );
+
+                }
+            );
+
+
+            answersElement.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+// ====================
+// 弱点データ更新
+// ====================
+
+function updateWeakness(correct) {
+
+    if (!weaknessMode) {
+        return;
+    }
+
+
+    const q =
+        quiz[currentQuestion];
+
+
+    if (!q) {
+        return;
+    }
+
+
+    const weaknesses =
+        JSON.parse(
+            localStorage.getItem(
+                "studyLinkWeaknesses"
+            ) || "{}"
+        );
+
+
+    if (!weaknesses["数学"]) {
+
+        weaknesses["数学"] = {};
+
+    }
+
+
+    if (
+        !weaknesses["数学"]["図形"]
+    ) {
+
+        weaknesses["数学"]["図形"] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            questions: {}
+
+        };
+
+    }
+
+
+    const data =
+        weaknesses["数学"]["図形"];
+
+
+    if (!data.questions) {
+
+        data.questions = {};
+
+    }
+
+
+    if (!data.questions[q.id]) {
+
+        data.questions[q.id] = {
+
+            wrong: 0,
+
+            correct: 0,
+
+            level: 0,
+
+            question:
+                q.question,
+
+            choices:
+                q.choices,
+
+            answer:
+                q.answer
+
+        };
+
+    }
+
+
+    const questionData =
+        data.questions[q.id];
+
+
+    if (correct) {
+
+        data.correct++;
+
+        questionData.correct++;
+
+        questionData.level =
+            Math.max(
+                0,
+                questionData.level - 1
+            );
+
+    }
+
+    else {
+
+        data.wrong++;
+
+        questionData.wrong++;
+
+        questionData.level =
+            Math.min(
+                5,
+                questionData.level + 1
+            );
+
+    }
+
+
+    const total =
+        data.correct +
+        data.wrong;
+
+
+    if (total > 0) {
+
+        const accuracy =
+            data.correct /
+            total;
+
+
+        if (
+            accuracy >= 0.9
+        ) {
+
+            data.level = 0;
+
+        }
+
+        else if (
+            accuracy >= 0.75
+        ) {
+
+            data.level = 1;
+
+        }
+
+        else if (
+            accuracy >= 0.6
+        ) {
+
+            data.level = 2;
+
+        }
+
+        else if (
+            accuracy >= 0.4
+        ) {
+
+            data.level = 3;
+
+        }
+
+        else {
+
+            data.level = 4;
+
+        }
+
+    }
+
+
+    localStorage.setItem(
+        "studyLinkWeaknesses",
+        JSON.stringify(
+            weaknesses
+        )
+    );
+
+}
+
+
+// ====================
+// 問題結果保存
+// ====================
+
+function saveQuestionResult(
+    q,
+    correct
+) {
+
+    const userId =
+        localStorage.getItem(
+            "userId"
+        );
+
+
+    if (!userId) {
+        return;
+    }
+
+
+    fetch(
+        GAS_URL,
+        {
+
+            method:
+                "POST",
+
+            body:
+                JSON.stringify({
+
+                    type:
+                        "saveQuestionResult",
+
+                    userId:
+                        userId,
+
+                    subject:
+                        "数学",
+
+                    unit:
+                        "図形",
+
+                    question:
+                        q.question,
+
+                    correct:
+                        correct,
+
+                    source:
+                        weaknessMode
+                            ? "weakness"
+                            : "normal"
+
+                })
+
+        }
+    )
+        .catch(
+            error => {
+
+                console.error(
+                    "問題結果の保存に失敗しました。",
+                    error
                 );
 
             }
         );
-
-
-        answersElement.appendChild(
-            button
-        );
-
-    });
 
 }
 
@@ -440,25 +951,39 @@ function checkAnswer(
         );
 
 
-    buttons.forEach(button => {
+    buttons.forEach(
+        button => {
 
-        button.disabled = true;
+            button.disabled =
+                true;
 
 
-        if (
-            button.dataset.correct ===
-            "true"
-        ) {
+            if (
+                button.dataset.correct ===
+                "true"
+            ) {
 
-            button.style.background =
-                "#4CAF50";
+                button.style.background =
+                    "#4CAF50";
 
-            button.style.color =
-                "white";
+                button.style.color =
+                    "white";
+
+            }
 
         }
+    );
 
-    });
+
+    updateWeakness(
+        correct
+    );
+
+
+    saveQuestionResult(
+        quiz[currentQuestion],
+        correct
+    );
 
 
     if (correct) {
@@ -496,27 +1021,30 @@ function checkAnswer(
     }
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        currentQuestion++;
+            currentQuestion++;
 
 
-        if (
-            currentQuestion >=
-            quiz.length
-        ) {
+            if (
+                currentQuestion >=
+                quiz.length
+            ) {
 
-            finishQuiz();
+                finishQuiz();
 
-        }
+            }
 
-        else {
+            else {
 
-            showQuestion();
+                showQuestion();
 
-        }
+            }
 
-    }, 800);
+        },
+        800
+    );
 
 }
 
@@ -529,10 +1057,6 @@ async function finishQuiz() {
 
     let studyMinutes = 0;
 
-
-    // ====================
-    // 学習時間
-    // ====================
 
     if (studyStartTime) {
 
@@ -569,15 +1093,99 @@ async function finishQuiz() {
 
 
     // ====================
+    // 弱点モード終了
+    // ====================
+
+    if (weaknessMode) {
+
+        const buttons =
+            finishArea.querySelectorAll(
+                "button"
+            );
+
+
+        buttons.forEach(
+            button => {
+
+                if (
+                    button.textContent.includes(
+                        "数学へ戻る"
+                    )
+                ) {
+
+                    button.style.display =
+                        "none";
+
+                }
+
+            }
+        );
+
+
+        const backButton =
+            document.createElement(
+                "button"
+            );
+
+
+        backButton.textContent =
+            "弱点トレーニングホームへ";
+
+
+        backButton.style.background =
+            "#2563eb";
+
+        backButton.style.color =
+            "white";
+
+        backButton.style.border =
+            "none";
+
+        backButton.style.padding =
+            "12px 20px";
+
+        backButton.style.borderRadius =
+            "10px";
+
+        backButton.style.cursor =
+            "pointer";
+
+        backButton.style.marginTop =
+            "15px";
+
+
+        backButton.addEventListener(
+            "click",
+            () => {
+
+                location.href =
+                    "weakness.html";
+
+            }
+        );
+
+
+        finishArea.appendChild(
+            backButton
+        );
+
+    }
+
+
+    // ====================
     // ユーザーID
     // ====================
 
     const userId =
-        localStorage.getItem("userId");
+        localStorage.getItem(
+            "userId"
+        );
 
 
     if (!userId) {
+
         return;
+
     }
 
 
@@ -585,7 +1193,9 @@ async function finishQuiz() {
     // 学習時間保存
     // ====================
 
-    if (studyMinutes > 0) {
+    if (
+        studyMinutes > 0
+    ) {
 
         try {
 
@@ -593,26 +1203,28 @@ async function finishQuiz() {
                 GAS_URL,
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify({
 
-                        type:
-                            "saveStudyTime",
+                            type:
+                                "saveStudyTime",
 
-                        userId:
-                            userId,
+                            userId:
+                                userId,
 
-                        subject:
-                            "数学",
+                            subject:
+                                "数学",
 
-                        unit:
-                            "図形",
+                            unit:
+                                "図形",
 
-                        minutes:
-                            studyMinutes
+                            minutes:
+                                studyMinutes
 
-                    })
+                        })
 
                 }
             );
@@ -635,7 +1247,9 @@ async function finishQuiz() {
     // XP保存
     // ====================
 
-    if (earnedXP > 0) {
+    if (
+        earnedXP > 0
+    ) {
 
         try {
 
@@ -644,20 +1258,22 @@ async function finishQuiz() {
                     GAS_URL,
                     {
 
-                        method: "POST",
+                        method:
+                            "POST",
 
-                        body: JSON.stringify({
+                        body:
+                            JSON.stringify({
 
-                            type:
-                                "updateXP",
+                                type:
+                                    "updateXP",
 
-                            userId:
-                                userId,
+                                userId:
+                                    userId,
 
-                            xp:
-                                earnedXP
+                                xp:
+                                    earnedXP
 
-                        })
+                            })
 
                     }
                 );
@@ -681,7 +1297,10 @@ async function finishQuiz() {
 
         catch (error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
 
             xpResultElement.textContent =
                 "⚠️ XPの保存に失敗しました。";
@@ -689,5 +1308,35 @@ async function finishQuiz() {
         }
 
     }
+
+}
+
+
+// ====================
+// 弱点トレーニング自動開始
+// ====================
+
+const urlParams =
+    new URLSearchParams(
+        location.search
+    );
+
+
+const isWeaknessMode =
+    urlParams.get("mode") ===
+    "weakness";
+
+
+if (isWeaknessMode) {
+
+    const count =
+        Number(
+            urlParams.get("count")
+        ) || 10;
+
+
+    startQuiz(
+        count
+    );
 
 }

@@ -15,6 +15,9 @@ const image = document.getElementById("image");
 
 let currentCategory = "school";
 
+let editingPostId = null;
+let editingPostImage = "";
+
 // --------------------
 // タブ切り替え
 // --------------------
@@ -60,7 +63,7 @@ closeBtn.onclick = () => {
 };
 
 // --------------------
-// 投稿
+// 投稿・編集
 // --------------------
 
 submitBtn.onclick = async () => {
@@ -72,35 +75,97 @@ submitBtn.onclick = async () => {
 
     let imageUrl = "";
 
+    // 編集中で画像を選び直していない場合は元画像を維持
     if(image.files.length > 0){
+
         imageUrl = await uploadImage(image.files[0]);
+
+    } else if(editingPostImage){
+
+        imageUrl = editingPostImage;
+
     }
 
     const data = {
-    type: "post",
-    category: category.value,
-    name: localStorage.getItem("username") || "ゲスト",
-    userId: localStorage.getItem("userId") || "",
-    title: title.value,
-    content: content.value,
-    image: imageUrl
-};
 
-    await fetch(
-        "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
-        {
-            method: "POST",
-            body: JSON.stringify(data)
+        type: editingPostId
+            ? "updatePost"
+            : "post",
+
+        category: category.value,
+
+        name:
+            localStorage.getItem("username") || "ゲスト",
+
+        userId:
+            localStorage.getItem("userId") || "",
+
+        title: title.value,
+
+        content: content.value,
+
+        image: imageUrl
+
+    };
+
+    // 編集する投稿のID
+    if(editingPostId){
+
+        data.id = editingPostId;
+
+    }
+
+    try {
+
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.result !== "success"){
+
+            alert(
+                result.message ||
+                "投稿の保存に失敗しました。"
+            );
+
+            return;
+
         }
-    );
 
-    title.value = "";
-    content.value = "";
-    image.value = "";
+        alert(
+            editingPostId
+            ? "投稿を更新しました！"
+            : "投稿しました！"
+        );
 
-    popup.style.display = "none";
+        title.value = "";
+        content.value = "";
+        image.value = "";
 
-    loadPosts();
+        category.value = currentCategory;
+
+        editingPostId = null;
+        editingPostImage = "";
+
+        submitBtn.textContent = "投稿する";
+
+        popup.style.display = "none";
+
+        loadPosts();
+
+    } catch(error){
+
+        console.error(error);
+
+        alert("投稿の保存に失敗しました。");
+
+    }
 
 };
 
@@ -109,69 +174,148 @@ submitBtn.onclick = async () => {
 // --------------------
 
 async function loadPosts(){
-    
+
     console.log("現在のカテゴリ:", currentCategory);
 
     const response = await fetch(
-        "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec"
+        "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec?type=posts"
     );
 
     const posts = await response.json();
 
-    postList.innerHTML="";
+    postList.innerHTML = "";
 
-    posts.reverse().forEach(post=>{
+    const currentUserId =
+        localStorage.getItem("userId") || "";
 
-        if(post.category!==currentCategory){
-            return;
-        }
+    posts
+        .slice()
+        .reverse()
+        .forEach(post => {
 
-        postList.innerHTML += `
-<div class="post">
+            if(post.category !== currentCategory){
+                return;
+            }
 
-    <small>👤 ${post.name}</small><br>
+            // 自分の投稿か確認
+            const isOwner =
+                currentUserId &&
+                String(post.userId) === String(currentUserId);
 
-    <small>📅 ${new Date(post.date).toLocaleString("ja-JP")}</small>
+            postList.innerHTML += `
+                <div class="post">
 
-    <h3>${post.title}</h3>
+                    <small>
+                        👤 ${escapeHtml(post.name)}
+                    </small>
 
-    <p>${post.content}</p>
+                    <br>
 
-    ${
-        post.image
-        ? `<img src="${post.image}" class="post-image" onclick="openImage('${post.image}')">`
-        : ""
-    }
+                    <small>
+                        📅 ${new Date(post.date).toLocaleString("ja-JP")}
+                    </small>
 
-    <div class="post-bottom">
-    <button
-    class="${localStorage.getItem('liked_' + post.id) ? 'liked-btn' : 'like-btn'}"
-    onclick="likePost(${post.id})"
->
-    ❤️ ${post.likes}
-</button>
-</div>
+                    <h3>
+                        ${escapeHtml(post.title)}
+                    </h3>
 
-<div class="comment-box">
+                    <p>
+                        ${escapeHtml(post.content)}
+                    </p>
 
-    <input
-        type="text"
-        id="comment-${post.id}"
-        placeholder="コメントを書く..."
-    >
+                    ${
+                        post.image
+                        ? `
+                            <img
+                                src="${post.image}"
+                                class="post-image"
+                                onclick="openImage('${post.image}')"
+                            >
+                        `
+                        : ""
+                    }
 
-    <button onclick="sendComment(${post.id})">
-        💬 送信
-    </button>
+                    ${
+                        isOwner
+                        ? `
+                            <div style="margin-top:10px;">
 
-    <div id="comments-${post.id}"></div>
-</div>
-</div>
-`;
+                                <button
+                                    class="save-btn"
+                                    onclick="editPost(${post.id})"
+                                >
+                                    ✏️ 編集
+                                </button>
 
-loadComments(post.id);
+                                <button
+                                    class="danger-btn"
+                                    onclick="deletePost(${post.id})"
+                                >
+                                    🗑️ 削除
+                                </button>
 
-    });
+                            </div>
+                        `
+                        : ""
+                    }
+
+                    <div class="post-bottom">
+
+                        <button
+                            class="${
+                                localStorage.getItem(
+                                    "liked_" + post.id
+                                )
+                                ? "liked-btn"
+                                : "like-btn"
+                            }"
+                            onclick="likePost(${post.id})"
+                        >
+                            ❤️ ${post.likes}
+                        </button>
+
+                    </div>
+
+                    <div class="comment-box">
+
+                        <input
+                            type="text"
+                            id="comment-${post.id}"
+                            placeholder="コメントを書く..."
+                        >
+
+                        <button
+                            onclick="sendComment(${post.id})"
+                        >
+                            💬 送信
+                        </button>
+
+                        <div
+                            id="comments-${post.id}"
+                        ></div>
+
+                    </div>
+
+                </div>
+            `;
+
+            loadComments(post.id);
+
+        });
+
+}
+
+// --------------------
+// HTMLエスケープ
+// --------------------
+
+function escapeHtml(text){
+
+    const div = document.createElement("div");
+
+    div.textContent = text || "";
+
+    return div.innerHTML;
 
 }
 
@@ -292,6 +436,138 @@ async function loadComments(postId){
         `;
 
     });
+
+}
+
+// --------------------
+// 投稿編集
+// --------------------
+
+async function editPost(id){
+
+    try {
+
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec?type=posts"
+        );
+
+        const posts = await response.json();
+
+        const post = posts.find(
+            item => Number(item.id) === Number(id)
+        );
+
+        if(!post){
+
+            alert("投稿が見つかりません。");
+
+            return;
+
+        }
+
+        const currentUserId =
+            localStorage.getItem("userId") || "";
+
+        if(
+            !currentUserId ||
+            String(post.userId) !== String(currentUserId)
+        ){
+
+            alert("この投稿は編集できません。");
+
+            return;
+
+        }
+
+        editingPostId = Number(id);
+
+        editingPostImage = post.image || "";
+
+        category.value = post.category;
+
+        title.value = post.title || "";
+
+        content.value = post.content || "";
+
+        submitBtn.textContent = "✏️ 投稿を更新";
+
+        popup.style.display = "flex";
+
+    } catch(error){
+
+        console.error(error);
+
+        alert("投稿の取得に失敗しました。");
+
+    }
+
+}
+
+// --------------------
+// 投稿削除
+// --------------------
+
+async function deletePost(id){
+
+    if(!confirm("この投稿を削除しますか？")){
+
+        return;
+
+    }
+
+    const userId =
+        localStorage.getItem("userId") || "";
+
+    if(!userId){
+
+        alert("ユーザー情報が確認できません。");
+
+        return;
+
+    }
+
+    try {
+
+        const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxdL1vYB2Iv6hpQOTDnvmBaIAChjsxXUvEIQdm9U-TM2hqBPeSGsrkVdJwLVNqN4Mcp/exec",
+            {
+                method: "POST",
+                body: JSON.stringify({
+
+                    type: "deletePost",
+
+                    id: id,
+
+                    userId: userId
+
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if(result.result === "success"){
+
+            alert("投稿を削除しました！");
+
+            loadPosts();
+
+        } else {
+
+            alert(
+                result.message ||
+                "投稿の削除に失敗しました。"
+            );
+
+        }
+
+    } catch(error){
+
+        console.error(error);
+
+        alert("投稿の削除に失敗しました。");
+
+    }
 
 }
 loadPosts();

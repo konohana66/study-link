@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>弱点トレーニング | Study Link</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            background: #f5f8fc;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+            color: #1f2937;
+        }
+
+        .weakness-container {
+            width: 100%;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 28px 18px 40px;
+            box-sizing: border-box;
+        }
+
+        /* ヘッダー */
+
+        .page-header {
+            margin-bottom: 26px;
+        }
+
+        .page-header .label {
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            margin-bottom: 6px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+        }
+
+        .page-header p {
+            margin: 10px 0 0;
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        /* 弱点一覧 */
+
+        #weaknessList {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        #weaknessList > div {
+            margin: 0 !important;
+            padding: 20px !important;
+            background: white !important;
+            border: 1px solid #e5eaf1;
+            border-radius: 18px !important;
+            box-shadow:
+                0 4px 16px rgba(31, 41, 55, 0.06);
+        }
+
+        #weaknessList h2 {
+            margin: 0 0 12px;
+            font-size: 18px;
+            font-weight: 750;
+        }
+
+        #weaknessList p {
+            margin: 7px 0;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        #weaknessList button {
+            width: 100%;
+            margin-top: 14px;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        #weaknessList button:hover {
+            opacity: 0.9;
+        }
+
+        /* 弱点なし */
+
+        #weaknessList > p {
+            margin: 0;
+            padding: 28px 20px;
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 18px;
+            text-align: center;
+            color: #6b7280;
+        }
+
+        /* ホームへ戻る */
+
+        .home-button {
+            width: 100%;
+            margin-top: 24px;
+            padding: 13px 16px;
+            border: 1px solid #dbe3ef;
+            border-radius: 12px;
+            background: white;
+            color: #374151;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .home-button:hover {
+            background: #f8fafc;
+        }
+
+        @media (max-width: 480px) {
+
+            .weakness-container {
+                padding: 22px 14px 32px;
+            }
+
+            .page-header h1 {
+                font-size: 26px;
+            }
+
+            #weaknessList > div {
+                padding: 17px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="weakness-container">
+
+        <header class="page-header">
+
+            <div class="label">
+                STUDY LINK
+            </div>
+
+            <h1>
+                弱点トレーニング
+            </h1>
+
+            <p>
+                間違えた問題をもとに、苦手な単元を重点的にトレーニングできます。
+            </p>
+
+        </header>
+
+
+        <div id="weaknessList"></div>
+
+
+        <button
+            class="home-button"
+            onclick="location.href='study.html'"
+        >
+            学習ホームへ戻る
+        </button>
+
+    </main>
+
+
+    <script src="js/weakness.js"></script>
+    <script src="js/maintenance-check.js?v=1"></script>
+
+</body>
+
+</html>
