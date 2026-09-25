@@ -172,7 +172,7 @@ if (adminPageButton) {
 
     adminPageButton.onclick = () => {
 
-        location.href = "/study-link/admin/admin.html";
+        location.href = "admin/admin.html";
 
     };
 
